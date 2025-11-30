@@ -19,18 +19,26 @@ export default function Dashboard() {
 
     return (
         <AppLayout>
-            <div className=" max-w-5xl w-full flex justify-between items-center ">
-                <h1 className="md:text-4xl text-3xl font-bold">Dashboard</h1>
-                <button className="bg-tertiary p-[0.8rem] rounded-xl flex items-center gap-[0.5rem]">
-                    <Calendar />
-                    <span className="md:text-lg">Hari ini</span>
-                </button>
+            <div className="max-w-[950px] ">
+                <div className="w-full flex justify-between items-center ">
+                    <h1 className="md:text-4xl text-3xl font-bold">
+                        Dashboard
+                    </h1>
+                    <button className="bg-tertiary hover:bg-tertiary/80 p-[0.6rem] rounded-xl flex items-center gap-[0.5rem]">
+                        <Calendar size={20} />
+                        <span className="md:text-lg">Hari ini</span>
+                    </button>
+                </div>
+                <p className="text-xl opacity-80 max-w-[65%] mt-[1rem]">
+                    Halo Dhlih! Pantau nutrisi makro dan mikro Anda hari ini
+                    untuk mencapai target kesehatan Anda.
+                </p>
             </div>
             {/* card */}
-            <div className="mt-[2rem] max-w-5xl w-full">
-                <h2 className="md:text-3xl text-2xl font-bold">Makronutrisi</h2>
+            <div className="mt-[2rem] max-w-[950px] w-full">
+                <h2 className="md:text-2xl text-xl font-bold">Makronutrisi</h2>
                 <div className="container flex md:gap-[3rem] gap-[1.5rem] flex-wrap justify-between items-center mt-[1.5rem]">
-                    <div className="lg:w-[47%] w-full rounded-xl bg-secondary md:p-[2rem] p-[1.5rem] flex items-center justify-between">
+                    <div className="lg:w-[47%] w-full rounded-xl bg-white border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
                         <div className="">
                             <div className="flex items-center gap-[0.8rem]">
                                 <div className="bg-tertiary rounded-xl p-[0.6rem]">
@@ -38,20 +46,24 @@ export default function Dashboard() {
                                 </div>
                                 <span className="text-xl">Karbohidrat</span>
                             </div>
-                            <h3 className="md:text-4xl text-3xl font-semibold mt-[2rem]">
+                            <h3 className="md:text-4xl text-3xl font-semibold mt-[1.5rem]">
                                 150
                                 <span className="text-lg font-normal">
                                     /250g
                                 </span>
                             </h3>
+                            <span className="block mt-[0.7rem] text-lg opacity-80">
+                                Tersisa 100 g
+                            </span>
                         </div>
                         <CircularProgress
                             stroke={10}
                             textSize="text-2xl"
-                            className="w-[100px] h-[100px] md:w-[120px] md:h-[120px]"
+                            className="w-[100px] h-[100px] md:w-[100px] md:h-[100px]"
                         />
                     </div>
-                    <div className="lg:w-[47%] w-full rounded-xl bg-secondary md:p-[2rem] p-[1.5rem] flex items-center justify-between">
+
+                    <div className="lg:w-[47%] w-full rounded-xl bg-white border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
                         <div className="">
                             <div className="flex items-center gap-[0.8rem]">
                                 <div className="bg-tertiary rounded-xl p-[0.6rem]">
@@ -59,20 +71,24 @@ export default function Dashboard() {
                                 </div>
                                 <span className="text-xl">Karbohidrat</span>
                             </div>
-                            <h3 className="md:text-4xl text-3xl font-semibold mt-[2rem]">
+                            <h3 className="md:text-4xl text-3xl font-semibold mt-[1.5rem]">
                                 150
                                 <span className="text-lg font-normal">
                                     /250g
                                 </span>
                             </h3>
+                            <span className="block mt-[0.7rem] text-lg opacity-80">
+                                Tersisa 100 g
+                            </span>
                         </div>
                         <CircularProgress
                             stroke={10}
                             textSize="text-2xl"
-                            className="w-[100px] h-[100px] md:w-[120px] md:h-[120px]"
+                            className="w-[100px] h-[100px] md:w-[100px] md:h-[100px]"
                         />
                     </div>
-                    <div className="lg:w-[47%] w-full rounded-xl bg-secondary md:p-[2rem] p-[1.5rem] flex items-center justify-between">
+
+                    <div className="lg:w-[47%] w-full rounded-xl bg-white border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
                         <div className="">
                             <div className="flex items-center gap-[0.8rem]">
                                 <div className="bg-tertiary rounded-xl p-[0.6rem]">
@@ -80,20 +96,24 @@ export default function Dashboard() {
                                 </div>
                                 <span className="text-xl">Karbohidrat</span>
                             </div>
-                            <h3 className="md:text-4xl text-3xl font-semibold mt-[2rem]">
+                            <h3 className="md:text-4xl text-3xl font-semibold mt-[1.5rem]">
                                 150
                                 <span className="text-lg font-normal">
                                     /250g
                                 </span>
                             </h3>
+                            <span className="block mt-[0.7rem] text-lg opacity-80">
+                                Tersisa 100 g
+                            </span>
                         </div>
                         <CircularProgress
                             stroke={10}
                             textSize="text-2xl"
-                            className="w-[100px] h-[100px] md:w-[120px] md:h-[120px]"
+                            className="w-[100px] h-[100px] md:w-[100px] md:h-[100px]"
                         />
                     </div>
-                    <div className="lg:w-[47%] w-full rounded-xl bg-secondary md:p-[2rem] p-[1.5rem] flex items-center justify-between">
+
+                    <div className="lg:w-[47%] w-full rounded-xl bg-white border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
                         <div className="">
                             <div className="flex items-center gap-[0.8rem]">
                                 <div className="bg-tertiary rounded-xl p-[0.6rem]">
@@ -101,29 +121,32 @@ export default function Dashboard() {
                                 </div>
                                 <span className="text-xl">Karbohidrat</span>
                             </div>
-                            <h3 className="md:text-4xl text-3xl font-semibold mt-[2rem]">
+                            <h3 className="md:text-4xl text-3xl font-semibold mt-[1.5rem]">
                                 150
                                 <span className="text-lg font-normal">
                                     /250g
                                 </span>
                             </h3>
+                            <span className="block mt-[0.7rem] text-lg opacity-80">
+                                Tersisa 100 g
+                            </span>
                         </div>
                         <CircularProgress
                             stroke={10}
                             textSize="text-2xl"
-                            className="w-[100px] h-[100px] md:w-[120px] md:h-[120px]"
+                            className="w-[100px] h-[100px] md:w-[100px] md:h-[100px]"
                         />
                     </div>
                 </div>
             </div>
 
             {/* nutrsi tambahan section */}
-            <div className="mt-[3rem] max-w-5xl w-full">
-                <h2 className="md:text-3xl text-2xl font-bold">
+            <div className="mt-[3rem] max-w-[950px] w-full">
+                <h2 className="md:text-2xl text-xl font-bold">
                     Nutrisi tambahan
                 </h2>
                 <div className="container flex gap-[1.5rem] flex-wrap justify-between items-center mt-[1.5rem]">
-                    <div className="card lg:w-[30%] w-full rounded-xl bg-secondary p-[1.5rem] flex items-center justify-between">
+                    <div className="card lg:w-[30%] w-full rounded-xl bg-white  border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
                         <div>
                             <div className="flex items-center gap-[0.8rem]">
                                 <div className="bg-tertiary rounded-xl p-[0.6rem]">
@@ -137,14 +160,17 @@ export default function Dashboard() {
                                     /250g
                                 </span>
                             </h3>
+                            <span className="block mt-[0.7rem] text-lg opacity-80">
+                                Tersisa 100 g
+                            </span>
                         </div>
                         <CircularProgress
                             stroke={10}
-                            textSize="text-2xl"
-                            className="w-[100px] h-[100px] md:w-[100px] md:h-[100px]"
+                            textSize="text-xl"
+                            className="w-[100px] h-[100px] md:w-[75px] md:h-[75px]"
                         />
                     </div>
-                    <div className="card lg:w-[30%] w-full rounded-xl bg-secondary p-[1.5rem] flex items-center justify-between">
+                    <div className="card lg:w-[30%] w-full rounded-xl bg-white  border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
                         <div>
                             <div className="flex items-center gap-[0.8rem]">
                                 <div className="bg-tertiary rounded-xl p-[0.6rem]">
@@ -158,14 +184,17 @@ export default function Dashboard() {
                                     /250g
                                 </span>
                             </h3>
+                            <span className="block mt-[0.7rem] text-lg opacity-80">
+                                Tersisa 100 g
+                            </span>
                         </div>
                         <CircularProgress
                             stroke={10}
-                            textSize="text-2xl"
-                            className="w-[100px] h-[100px] md:w-[100px] md:h-[100px]"
+                            textSize="text-xl"
+                            className="w-[100px] h-[100px] md:w-[75px] md:h-[75px]"
                         />
                     </div>
-                    <div className="card lg:w-[30%] w-full rounded-xl bg-secondary p-[1.5rem] flex items-center justify-between">
+                    <div className="card lg:w-[30%] w-full rounded-xl bg-white  border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
                         <div>
                             <div className="flex items-center gap-[0.8rem]">
                                 <div className="bg-tertiary rounded-xl p-[0.6rem]">
@@ -179,11 +208,14 @@ export default function Dashboard() {
                                     /250g
                                 </span>
                             </h3>
+                            <span className="block mt-[0.7rem] text-lg opacity-80">
+                                Tersisa 100 g
+                            </span>
                         </div>
                         <CircularProgress
                             stroke={10}
-                            textSize="text-2xl"
-                            className="w-[100px] h-[100px] md:w-[100px] md:h-[100px]"
+                            textSize="text-xl"
+                            className="w-[100px] h-[100px] md:w-[75px] md:h-[75px]"
                         />
                     </div>
                 </div>

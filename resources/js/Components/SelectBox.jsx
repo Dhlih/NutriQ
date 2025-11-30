@@ -4,7 +4,7 @@ export default function SelectBox({ icon: Icon, label, active, onClick }) {
             <button
                 onClick={onClick}
                 className={`
-                    fill-secondary rounded-xl md:p-[2.5rem] p-[2rem] gap-[1rem] hover:opacity-80
+                    bg-white rounded-xl md:p-[2.5rem] p-[2rem] gap-[1rem] hover:opacity-80
                     ${active ? "fill-tertiary" : "fill-secondary"}
                 `}
             >
