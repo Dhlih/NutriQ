@@ -25,20 +25,20 @@ export default function Dashboard() {
                         Dashboard
                     </h1>
                     <button className="bg-tertiary hover:bg-tertiary/80 p-[0.6rem] rounded-xl flex items-center gap-[0.5rem]">
-                        <Calendar size={20} />
+                        <Calendar size={18} />
                         <span className="md:text-lg">Hari ini</span>
                     </button>
                 </div>
-                <p className="text-xl opacity-80 max-w-[65%] mt-[1rem]">
+                <p className="md:text-xl text-lg opacity-80 md:max-w-[65%] w-full mt-[1rem]">
                     Halo Dhlih! Pantau nutrisi makro dan mikro Anda hari ini
                     untuk mencapai target kesehatan Anda.
                 </p>
             </div>
-            {/* card */}
+
             <div className="mt-[2rem] max-w-[950px] w-full">
                 <h2 className="md:text-2xl text-xl font-bold">Makronutrisi</h2>
-                <div className="container flex md:gap-[3rem] gap-[1.5rem] flex-wrap justify-between items-center mt-[1.5rem]">
-                    <div className="lg:w-[47%] w-full rounded-xl bg-white border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
+                <div className="container flex md:gap-[2rem] gap-[1.5rem] flex-wrap justify-between items-center mt-[1.5rem]">
+                    <div className="card lg:w-[47%] w-full rounded-xl bg-white border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
                         <div className="">
                             <div className="flex items-center gap-[0.8rem]">
                                 <div className="bg-tertiary rounded-xl p-[0.6rem]">

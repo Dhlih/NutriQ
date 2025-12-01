@@ -55,8 +55,9 @@ export default function Personalisasi() {
             !data.jenis_kelamin
         ) {
             alert("isi semua field!");
+            console.log(data);
+            return;
         }
-        console.log(data);
 
         post("/personalisasi");
     };
@@ -91,7 +92,10 @@ export default function Personalisasi() {
             {showModal && (
                 <div className="w-full h-full fixed top-0 right-0 black-0 left-0 z-50 flex items-center justify-center bg-black/80">
                     <div className="card relative md:max-w-md max-w-xs w-full flex flex-col gap-[0.5rem] items-center justify-center rounded-xl md:p-[1.5rem] py-[1.5rem] px-[1rem] fill-secondary">
-                        <Title text={"Siap memulai perjalanan sehat Anda?"} className="text-center"/>
+                        <Title
+                            text={"Siap memulai perjalanan sehat Anda?"}
+                            className="text-center"
+                        />
                         <p className="text-center opacity-80 text-xl">
                             Anda masih bisa mengubah data-data ini kapan saja
                             melalui menu Profil.

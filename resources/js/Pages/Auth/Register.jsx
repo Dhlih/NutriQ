@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { router, useForm, usePage } from "@inertiajs/react";
 import { Eye, EyeOff } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Register() {
     const [isNotFilled, setIsnotFilled] = useState(false);
     const [hidePassword, setHidePassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const { data, setData, post, processing, errors } = useForm({
         name: "",
         email: "",
@@ -26,6 +28,7 @@ export default function Register() {
             return;
         }
         post("/register");
+        setIsLoading(true);
     };
 
     return (
@@ -33,7 +36,7 @@ export default function Register() {
             <div className="logo">
                 <h1 className="font-bold text-4xl">NutriQ</h1>
             </div>
-            <div className="card md:max-w-[320px] max-w-xs w-full p-[1.5rem] rounded-xl fill-secondary shadow-lg">
+            <div className="card border border-gray-200 md:max-w-[320px] max-w-xs w-full p-[1.5rem] rounded-xl fill-secondary shadow-lg">
                 <form onSubmit={handleRegister} className="flex flex-col">
                     <div className="flex flex-col gap-[0.5rem] ">
                         <label htmlFor="" className="font-medium">
@@ -72,19 +75,28 @@ export default function Register() {
                             {/* hide password button */}
                             <button
                                 onClick={() => setHidePassword(!hidePassword)}
-                                className="mr-[1rem] cursor-pointer opacity-60"
+                                className="mr-[1rem] w-6 h-6 cursor-pointer opacity-60"
                                 type="button"
                             >
-                                {hidePassword ? <EyeOff /> : <Eye />}
+                                {hidePassword ? (
+                                    <Eye className="w-full h-full" />
+                                ) : (
+                                    <EyeOff className="h-full w-full" />
+                                )}
                             </button>
                         </div>
                     </div>
 
                     <button
                         type="submit"
-                        className="mt-[2rem] fill-quartenary text-white p-[0.6rem] rounded-lg font-semibold"
+                        className={`mt-[2rem] fill-quartenary text-white p-[0.6rem] rounded-lg font-semibold hover:bg-quartenary/80  flex items-center justify-center`}
+                        disabled={isLoading}
                     >
-                        Register
+                        {!isLoading ? (
+                            "Register"
+                        ) : (
+                            <Spinner className="w-7 h-7 " />
+                        )}
                     </button>
                 </form>
 
