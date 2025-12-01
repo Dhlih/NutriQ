@@ -19,7 +19,7 @@ class MakananController extends Controller
                     ->latest()
                     ->get();
 
-        return Inertia::render('Makanan/Index', [
+        return Inertia::render('Makanan/ScanMakanan', [
             'makanans' => $makanans
         ]);
     }
@@ -85,7 +85,7 @@ class MakananController extends Controller
     {
         $makanan = Makanan::with('detailMakanans')->findOrFail($id);
 
-        return Inertia::render('Makanan/Show', [
+        return Inertia::render('Makanan/HasilScanMakanan', [
             'makanan' => $makanan,
         ]);
     }
