@@ -26,12 +26,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/personalisasi', [UserController::class, 'index'])->name('personalisasi');
     Route::post('/personalisasi', [UserController::class, 'store'])->name('personalisasi.store');
 
-    Route::get('/makanan', [MakananController::class, 'index'])->name('makanan.index');
+    // Scan makanan
+    Route::get('/scan', action: [MakananController::class, 'index'])->name('makanan.index');
     Route::post('/makanan/generate', [MakananController::class, 'generate_makanan'])->name('makanan.generate');
-Route::get('/makanan/{id}', [MakananController::class, 'show'])
-    ->name('makanan.show');
+
+    // History
+    Route::get('/makanan/{id}', [MakananController::class, 'show'])
+        ->name('makanan.show');
 });
-
-
-
-
