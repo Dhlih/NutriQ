@@ -53,7 +53,7 @@ export default function AppLayout({ children }) {
                                 key={i}
                                 href={item.href}
                                 className={
-                                    "flex items-center text-lg gap-3 px-4 py-2 rounded-lg font-medium transition " +
+                                    "flex items-center text-lg gap-5 px-4 py-2 rounded-lg  transition " +
                                     (isActive(item.href)
                                         ? "bg-tertiary"
                                         : "hover:bg-tertiary/80")

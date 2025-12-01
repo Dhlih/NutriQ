@@ -1,7 +1,6 @@
 import React from "react";
 import AppLayout from "@/Components/AppLayout";
-import Title from "@/Components/Title";
-import CircularProgress from "@/Components/CircularProgress";
+import DashboardCard from "@/Components/DashboardCard"; // Pastikan path benar
 import {
     Beef,
     Candy,
@@ -10,17 +9,22 @@ import {
     Flame,
     Leaf,
     Calendar,
+    Sparkles,
 } from "lucide-react";
 import { Head, usePage } from "@inertiajs/react";
 
 export default function Dashboard() {
-    const { kebutuhan } = usePage().props;
-    console.log(kebutuhan);
+    // Langsung destructure data dari props
+    const { user, kebutuhan, makananHariIni, tanggal } = usePage().props;
+
+    // Pastikan objek ada agar tidak error saat mengakses properti
+    const kbt = kebutuhan || {};
+    const mkn = makananHariIni || {};
 
     return (
         <AppLayout>
             <Head title="Dashboard" />
-            <div className="max-w-[950px] w-full">
+            <div className="max-w-[980px] w-full">
                 <div className="w-full flex justify-between items-center ">
                     <h1 className="md:text-4xl text-3xl font-bold">
                         Dashboard
@@ -31,195 +35,93 @@ export default function Dashboard() {
                     </button>
                 </div>
                 <p className="md:text-xl text-lg opacity-80 md:max-w-[65%] w-full mt-[1rem]">
-                    Halo Dhlih! Pantau nutrisi makro dan mikro Anda hari ini
-                    untuk mencapai target kesehatan Anda.
+                    Halo {user?.name ?? "Pengguna"}! Pantau nutrisi makro dan
+                    mikro Anda hari ini untuk mencapai target kesehatan Anda.
                 </p>
 
+                {/* Bagian Makronutrisi */}
                 <div className="mt-[2rem]">
                     <h2 className="md:text-2xl text-xl font-bold">
                         Makronutrisi
                     </h2>
                     <div className="container flex md:gap-[2rem] gap-[1.5rem] flex-wrap justify-between items-center mt-[1.5rem]">
-                        <div className="card lg:w-[47%] w-full rounded-xl bg-white border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
-                            <div className="">
-                                <div className="flex items-center gap-[0.8rem]">
-                                    <div className="bg-tertiary rounded-xl p-[0.6rem]">
-                                        <Wheat />
-                                    </div>
-                                    <span className="text-xl">Karbohidrat</span>
-                                </div>
-                                <h3 className="md:text-4xl text-3xl font-semibold mt-[1.5rem]">
-                                    150
-                                    <span className="text-lg font-normal">
-                                        /250g
-                                    </span>
-                                </h3>
-                                <span className="block mt-[0.7rem] text-lg opacity-80">
-                                    Tersisa 100 g
-                                </span>
-                            </div>
-                            <CircularProgress
-                                stroke={10}
-                                textSize="text-2xl"
-                                className="w-[100px] h-[100px] md:w-[100px] md:h-[100px]"
-                            />
-                        </div>
+                        {/* 1. Protein */}
+                        <DashboardCard
+                            icon={Beef}
+                            label="Protein (g)"
+                            makananHariIni={mkn.protein}
+                            kebutuhan={kbt.protein}
+                            className="lg:w-[47%]"
+                            satuan="g"
+                        />
 
-                        <div className="lg:w-[47%] w-full rounded-xl bg-white border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
-                            <div className="">
-                                <div className="flex items-center gap-[0.8rem]">
-                                    <div className="bg-tertiary rounded-xl p-[0.6rem]">
-                                        <Wheat />
-                                    </div>
-                                    <span className="text-xl">Karbohidrat</span>
-                                </div>
-                                <h3 className="md:text-4xl text-3xl font-semibold mt-[1.5rem]">
-                                    150
-                                    <span className="text-lg font-normal">
-                                        /250g
-                                    </span>
-                                </h3>
-                                <span className="block mt-[0.7rem] text-lg opacity-80">
-                                    Tersisa 100 g
-                                </span>
-                            </div>
-                            <CircularProgress
-                                stroke={10}
-                                textSize="text-2xl"
-                                className="w-[100px] h-[100px] md:w-[100px] md:h-[100px]"
-                            />
-                        </div>
+                        {/* 2. Karbohidrat */}
+                        <DashboardCard
+                            icon={Wheat}
+                            label="Karbohidrat (g)"
+                            makananHariIni={mkn.karbohidrat}
+                            kebutuhan={kbt.karbohidrat}
+                            className="lg:w-[47%]"
+                            satuan="g"
+                        />
 
-                        <div className="lg:w-[47%] w-full rounded-xl bg-white border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
-                            <div className="">
-                                <div className="flex items-center gap-[0.8rem]">
-                                    <div className="bg-tertiary rounded-xl p-[0.6rem]">
-                                        <Wheat />
-                                    </div>
-                                    <span className="text-xl">Karbohidrat</span>
-                                </div>
-                                <h3 className="md:text-4xl text-3xl font-semibold mt-[1.5rem]">
-                                    150
-                                    <span className="text-lg font-normal">
-                                        /250g
-                                    </span>
-                                </h3>
-                                <span className="block mt-[0.7rem] text-lg opacity-80">
-                                    Tersisa 100 g
-                                </span>
-                            </div>
-                            <CircularProgress
-                                stroke={10}
-                                textSize="text-2xl"
-                                className="w-[100px] h-[100px] md:w-[100px] md:h-[100px]"
-                            />
-                        </div>
+                        {/* 3. Lemak */}
+                        <DashboardCard
+                            icon={Droplet}
+                            label="Lemak (g)"
+                            makananHariIni={mkn.lemak}
+                            kebutuhan={kbt.lemak}
+                            className="lg:w-[47%]"
+                            satuan="g"
+                        />
 
-                        <div className="lg:w-[47%] w-full rounded-xl bg-white border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
-                            <div className="">
-                                <div className="flex items-center gap-[0.8rem]">
-                                    <div className="bg-tertiary rounded-xl p-[0.6rem]">
-                                        <Wheat />
-                                    </div>
-                                    <span className="text-xl">Karbohidrat</span>
-                                </div>
-                                <h3 className="md:text-4xl text-3xl font-semibold mt-[1.5rem]">
-                                    150
-                                    <span className="text-lg font-normal">
-                                        /250g
-                                    </span>
-                                </h3>
-                                <span className="block mt-[0.7rem] text-lg opacity-80">
-                                    Tersisa 100 g
-                                </span>
-                            </div>
-                            <CircularProgress
-                                stroke={10}
-                                textSize="text-2xl"
-                                className="w-[100px] h-[100px] md:w-[100px] md:h-[100px]"
-                            />
-                        </div>
+                        {/* 4. Kalori */}
+                        <DashboardCard
+                            icon={Flame}
+                            label="Kalori (Kkal)"
+                            makananHariIni={mkn.kalori}
+                            kebutuhan={kbt.kalori}
+                            className="lg:w-[47%]"
+                            satuan="Kkal"
+                        />
                     </div>
                 </div>
 
-                {/* nutrsi tambahan section */}
+                {/* Bagian Nutrisi Tambahan */}
                 <div className="mt-[3rem] ">
                     <h2 className="md:text-2xl text-xl font-bold">
-                        Nutrisi tambahan
+                        Nutrisi Tambahan
                     </h2>
-                    <div className="container flex gap-[1.5rem] flex-wrap justify-between items-center mt-[1.5rem]">
-                        <div className="card lg:w-[30%] w-full rounded-xl bg-white  border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
-                            <div>
-                                <div className="flex items-center gap-[0.8rem]">
-                                    <div className="bg-tertiary rounded-xl p-[0.6rem]">
-                                        <Wheat />
-                                    </div>
-                                    <span className="text-xl">Natrium</span>
-                                </div>
-                                <h3 className="md:text-4xl text-3xl font-semibold mt-[1.5rem]">
-                                    150
-                                    <span className="text-lg font-normal">
-                                        /250g
-                                    </span>
-                                </h3>
-                                <span className="block mt-[0.7rem] text-lg opacity-80">
-                                    Tersisa 100 g
-                                </span>
-                            </div>
-                            <CircularProgress
-                                stroke={10}
-                                textSize="text-xl"
-                                className="w-[100px] h-[100px] md:w-[75px] md:h-[75px]"
-                            />
-                        </div>
-                        <div className="card lg:w-[30%] w-full rounded-xl bg-white  border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
-                            <div>
-                                <div className="flex items-center gap-[0.8rem]">
-                                    <div className="bg-tertiary rounded-xl p-[0.6rem]">
-                                        <Wheat />
-                                    </div>
-                                    <span className="text-xl">Natrium</span>
-                                </div>
-                                <h3 className="md:text-4xl text-3xl font-semibold mt-[1.5rem]">
-                                    150
-                                    <span className="text-lg font-normal">
-                                        /250g
-                                    </span>
-                                </h3>
-                                <span className="block mt-[0.7rem] text-lg opacity-80">
-                                    Tersisa 100 g
-                                </span>
-                            </div>
-                            <CircularProgress
-                                stroke={10}
-                                textSize="text-xl"
-                                className="w-[100px] h-[100px] md:w-[75px] md:h-[75px]"
-                            />
-                        </div>
-                        <div className="card lg:w-[30%] w-full rounded-xl bg-white  border border-gray-200 hover:border-tertiary transition p-[1.5rem] shadow-sm flex items-center justify-between">
-                            <div>
-                                <div className="flex items-center gap-[0.8rem]">
-                                    <div className="bg-tertiary rounded-xl p-[0.6rem]">
-                                        <Wheat />
-                                    </div>
-                                    <span className="text-xl">Natrium</span>
-                                </div>
-                                <h3 className="md:text-4xl text-3xl font-semibold mt-[1.5rem]">
-                                    150
-                                    <span className="text-lg font-normal">
-                                        /250g
-                                    </span>
-                                </h3>
-                                <span className="block mt-[0.7rem] text-lg opacity-80">
-                                    Tersisa 100 g
-                                </span>
-                            </div>
-                            <CircularProgress
-                                stroke={10}
-                                textSize="text-xl"
-                                className="w-[100px] h-[100px] md:w-[75px] md:h-[75px]"
-                            />
-                        </div>
+                    <div className="container flex md:gap-[1.5rem] gap-[1.5rem] flex-wrap justify-between items-center mt-[1.5rem]">
+                        {/* 5. Natrium */}
+                        <DashboardCard
+                            icon={Sparkles}
+                            label="Natrium (mg)"
+                            makananHariIni={mkn.natrium}
+                            kebutuhan={kbt.natrium}
+                            className="lg:w-[30%]"
+                            satuan="mg"
+                        />
+
+                        {/* 6. Serat */}
+                        <DashboardCard
+                            icon={Leaf}
+                            label="Serat (g)"
+                            makananHariIni={mkn.serat}
+                            kebutuhan={kbt.serat}
+                            className="lg:w-[30%]"
+                            satuan="g"
+                        />
+
+                        {/* 7. Gula */}
+                        <DashboardCard
+                            icon={Candy}
+                            label="Gula (g)"
+                            makananHariIni={mkn.gula_tambahan}
+                            kebutuhan={kbt.gula_tambahan}
+                            className="lg:w-[30%]"
+                            satuan="g"
+                        />
                     </div>
                 </div>
             </div>

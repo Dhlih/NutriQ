@@ -42,7 +42,7 @@ export default function ScanMakanan() {
                         Scan Makanan
                     </h1>
 
-                    <p className="md:text-xl text-lg opacity-80 md:max-w-[85%] w-full mt-[1rem]">
+                    <p className="md:text-xl text-lg opacity-80 md:max-w-[80%] w-full mt-[1rem]">
                         Unggah gambar makanan Anda dan kami akan menganalisis
                         nutrisi yang ada pada makanan secara otomatis!
                     </p>
@@ -53,7 +53,7 @@ export default function ScanMakanan() {
                         encType="multipart/form-data"
                     >
                         {/* Input Tanggal & Jam */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+                        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8 gap-6 w-full">
                             {/* Tanggal */}
                             <div className="flex flex-col gap-[0.6rem] relative w-full">
                                 <Label className="text-[15px] text-lg font-medium text-black">
@@ -131,7 +131,7 @@ export default function ScanMakanan() {
                             ) : (
                                 <div>
                                     <ImageIcon className="mx-auto mb-3 h-12 w-12 text-gray-600" />
-                                    <p className="font-medium text-gray-800">
+                                    <p className="font-medium text-gray-800 ">
                                         Seret atau klik untuk memasukkan gambar
                                     </p>
                                     <p className="text-sm text-gray-600 mt-1">
@@ -152,7 +152,7 @@ export default function ScanMakanan() {
                         {/* Button */}
                         <div className="flex justify-end">
                             <Button
-                                className="bg-quartenary text-white p-[1.5rem] text-[15px] rounded-lg hover:bg-quartenary/80 mt-[1rem] font-semibold"
+                                className="bg-quartenary md:w-auto w-full text-white p-[1.5rem] text-[15px] rounded-lg hover:bg-quartenary/80 mt-[1rem] font-semibold"
                                 disabled={processing}
                                 type="submit"
                             >

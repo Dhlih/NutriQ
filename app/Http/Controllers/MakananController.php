@@ -51,7 +51,7 @@ class MakananController extends Controller
         $makanan = Makanan::create([
             'user_id' => $user->id,
             'nama' => $hasil['nama'],
-            'tanggal' => $request->tanggal, // Override tanggal AI dengan tanggal server agar akurat
+            'tanggal' => $request->tanggal,
             'jam' => $request->jam,
             'foto' => '/storage/' . $path, // Simpan path gambar
             'total_kalori' => $hasil['total']['total_kalori'],
@@ -83,7 +83,8 @@ class MakananController extends Controller
     }
     public function show($id)
     {
-        $makanan = Makanan::with('detailMakanans')->findOrFail($id);
+        $userId = Auth::id();
+        $makanan = Makanan::with('detailMakanans')->where('user_id', $userId)->where('id', $id)->firstOrFail();
 
         return Inertia::render('Makanan/HasilScanMakanan', [
             'makanan' => $makanan,
