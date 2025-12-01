@@ -6,7 +6,6 @@ import { Spinner } from "@/Components/ui/spinner";
 export default function Login() {
     const [isNotFilled, setIsNotFilled] = useState(false);
     const [hidePassword, setHidePassword] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const { data, setData, post, processing, errors } = useForm({
         email: "",
         password: "",
@@ -69,9 +68,9 @@ export default function Login() {
                     <button
                         type="submit"
                         className={`mt-[2rem] fill-quartenary text-white p-[0.6rem] rounded-lg font-semibold hover:bg-quartenary/80  flex items-center justify-center`}
-                        disabled={isLoading}
+                        disabled={processing}
                     >
-                        {!isLoading ? (
+                        {!processing ? (
                             "Login"
                         ) : (
                             <Spinner className="w-7 h-7 " />

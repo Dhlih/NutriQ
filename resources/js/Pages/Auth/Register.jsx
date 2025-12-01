@@ -6,7 +6,6 @@ import { Spinner } from "@/components/ui/spinner";
 export default function Register() {
     const [isNotFilled, setIsnotFilled] = useState(false);
     const [hidePassword, setHidePassword] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const { data, setData, post, processing, errors } = useForm({
         name: "",
         email: "",
@@ -28,7 +27,6 @@ export default function Register() {
             return;
         }
         post("/register");
-        setIsLoading(true);
     };
 
     return (
@@ -90,9 +88,9 @@ export default function Register() {
                     <button
                         type="submit"
                         className={`mt-[2rem] fill-quartenary text-white p-[0.6rem] rounded-lg font-semibold hover:bg-quartenary/80  flex items-center justify-center`}
-                        disabled={isLoading}
+                        disabled={processing}
                     >
-                        {!isLoading ? (
+                        {!processing ? (
                             "Register"
                         ) : (
                             <Spinner className="w-7 h-7 " />
