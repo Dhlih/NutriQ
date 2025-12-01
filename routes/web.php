@@ -29,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/scan-makanan', [MakananController::class, 'index'])->name('scan.index');
     Route::post('/scan-makanan/generate', [MakananController::class, 'generate_makanan'])->name('scan.generate');
 
+    Route::get('/riwayat', [MakananController::class, 'riwayat'])->name('riwayat.index');
     Route::get('/riwayat/{slug}', [MakananController::class, 'show'])->name('riwayat.show');
 });
 

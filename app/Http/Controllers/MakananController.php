@@ -79,4 +79,19 @@ class MakananController extends Controller
             'makanan' => $makanan,
         ]);
     }
+
+    public function riwayat()
+    {
+        $userId = Auth::id();
+        $makanans = Makanan::where('user_id', $userId)
+            ->orderBy('tanggal', 'desc')
+            ->orderBy('jam', 'desc')
+            ->get();
+
+        dd($makanans);
+
+        return Inertia::render('Makanan/Riwayat', [
+            'makanans' => $makanans,
+        ]);
+    }
 }
