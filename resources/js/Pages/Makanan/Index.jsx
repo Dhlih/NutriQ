@@ -26,7 +26,7 @@ export default function ScanMakanan() {
 
     const submit = (e) => {
         e.preventDefault();
-        post(route("makanan.generate"), {
+        post(route("scan.generate"), {
             forceFormData: true,
         });
     };

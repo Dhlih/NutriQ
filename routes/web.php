@@ -26,9 +26,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/personalisasi', [UserController::class, 'index'])->name('personalisasi');
     Route::post('/personalisasi', [UserController::class, 'store'])->name('personalisasi.store');
 
-    Route::get('/makanan', [MakananController::class, 'index'])->name('makanan.index');
-    Route::post('/makanan/generate', [MakananController::class, 'generate_makanan'])->name('makanan.generate');
-    Route::get('/makanan/{id}', [MakananController::class, 'show'])->name('makanan.show');
+    Route::get('/scan-makanan', [MakananController::class, 'index'])->name('scan.index');
+    Route::post('/scan-makanan/generate', [MakananController::class, 'generate_makanan'])->name('scan.generate');
+
+    Route::get('/riwayat/{slug}', [MakananController::class, 'show'])->name('riwayat.show');
 });
 
 

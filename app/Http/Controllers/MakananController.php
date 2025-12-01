@@ -13,27 +13,17 @@ class MakananController extends Controller
 {
     public function index()
     {
-        // Saya tambahkan query agar list makanan muncul di frontend
-        $makanans = Makanan::with('detailMakanans')
-                    ->where('user_id', Auth::id())
-                    ->latest()
-                    ->get();
-
-        return Inertia::render('Makanan/Index', [
-            'makanans' => $makanans
-        ]);
+        return Inertia::render('Makanan/Index');
     }
 
     public function generate_makanan(Request $request, GeminiService $gemini)
     {
-        // 1. Validasi Gambar
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // Max 5MB
             'tanggal' => 'required|date',
             'jam' => 'required'
         ]);
 
-        // 2. Kirim File ke AI Service
         $file = $request->file('image');
         $hasil = $gemini->generateMakanan($file);
 
@@ -41,13 +31,10 @@ class MakananController extends Controller
             return back()->withErrors(['error' => 'Gagal menganalisis gambar makanan.']);
         }
 
-        // 3. Simpan Gambar ke Storage (Public)
-        // Pastikan sudah run: php artisan storage:link
         $path = $file->store('makanan', 'public');
 
         $user = Auth::user();
 
-        // 4. Simpan ke Database
         $makanan = Makanan::create([
             'user_id' => $user->id,
             'nama' => $hasil['nama'],
@@ -63,10 +50,9 @@ class MakananController extends Controller
             'total_gula_tambahan' => $hasil['total']['total_gula_tambahan'],
         ]);
 
-        // Simpan detail
         foreach ($hasil['detail'] as $item) {
             DetailMakanan::create([
-                'makanan_id' => $makanan->id, // Perbaikan: id, bukan makanan_id
+                'makanan_id' => $makanan->id,
                 'nama' => $item['nama'],
                 'kalori' => $item['kalori'],
                 'protein' => $item['protein'],
@@ -78,13 +64,16 @@ class MakananController extends Controller
             ]);
         }
 
-       return redirect()->route('makanan.show', $makanan->id);
+       return redirect()->route('riwayat.show', $makanan->slug);
 
     }
-    public function show($id)
+    public function show($slug)
     {
         $userId = Auth::id();
-        $makanan = Makanan::with('detailMakanans')->where('user_id', $userId)->where('id', $id)->firstOrFail();
+        $makanan = Makanan::with('detailMakanans')
+            ->where('user_id', $userId)
+            ->where('slug', $slug)
+            ->firstOrFail();
 
         return Inertia::render('Makanan/Show', [
             'makanan' => $makanan,

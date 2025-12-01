@@ -31,7 +31,7 @@ class DashboardController extends Controller
         ')
         ->first();
 
-        dd($makananHariIni, $kebutuhan);
+        // dd($makananHariIni, $kebutuhan);
 
         return Inertia::render('Dashboard', [
             'user' => $user,
