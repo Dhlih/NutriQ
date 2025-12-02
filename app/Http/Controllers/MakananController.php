@@ -13,7 +13,7 @@ class MakananController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Makanan/Index');
+        return Inertia::render('Makanan/ScanMakanan');
     }
 
     public function generate_makanan(Request $request, GeminiService $gemini)

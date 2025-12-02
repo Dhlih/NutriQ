@@ -18,7 +18,7 @@ export default function AppLayout({ children }) {
         },
         {
             name: "Scan Makanan",
-            href: "/scan",
+            href: "/scan-makanan",
             icon: <ScanSearch size={25} />,
         },
         {
