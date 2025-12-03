@@ -86,10 +86,10 @@ export default function ScanMakanan() {
 
     return (
         <AppLayout>
-            <div>
+            <div className="w-full min-h-screen">
                 <Head title="Scan Makanan" />
 
-                <div className="max-w-3xl w-full">
+                <div className="w-full">
                     <h1 className="md:text-4xl text-3xl font-bold">
                         Scan Makanan
                     </h1>
