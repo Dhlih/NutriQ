@@ -1,26 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { router, useForm, usePage } from "@inertiajs/react";
 import { Eye, EyeOff, User, Mail, Lock } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import Title from "@/Components/Title";
 
 export default function Register() {
-    const [isNotFilled, setIsnotFilled] = useState(false);
+    const [isNotFilled, setIsNotFilled] = useState(false);
     const [hidePassword, setHidePassword] = useState(false);
     const { data, setData, post, processing, errors } = useForm({
         name: "",
         email: "",
         password: "",
     });
-    const { flash } = usePage().props;
 
     const handleRegister = (e) => {
         e.preventDefault();
-        alert("mendaftarkan akun");
 
         if (!data.name || !data.email || !data.password) {
-            alert("isi semua field!");
+            setIsNotFilled(true);
             return;
         }
 
@@ -30,6 +29,15 @@ export default function Register() {
         }
         post("/register");
     };
+
+    useEffect(() => {
+        if (isNotFilled) {
+            const timer = setTimeout(() => {
+                setIsNotFilled(false);
+            }, 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [isNotFilled]);
 
     // **Class yang Diperbarui untuk Input**
     const inputWrapperClass =
@@ -41,7 +49,7 @@ export default function Register() {
     return (
         <div className="h-screen flex flex-col justify-center items-center gap-[1.5rem]">
             <div className="logo text-center">
-                <h1 className="font-bold text-4xl">NutriQ</h1>
+                <Title text="NutriQ" />
                 <p className="text-lg">Mulai perjalanan sehat Anda!</p>
             </div>
             {/* Mengubah bg-secondary menjadi bg-white/bg-card jika ada di theme Anda */}
@@ -101,7 +109,7 @@ export default function Register() {
                             {/* hide password button */}
                             <button
                                 onClick={() => setHidePassword(!hidePassword)}
-                                className="w-5 h-5 cursor-pointer opacity-60 absolute right-3 transition-opacity duration-200 hover:opacity-100" // right-3 agar sedikit menjauh dari border
+                                className="w-5 h-5 cursor-pointer opacity-60 absolute right-3 " // right-3 agar sedikit menjauh dari border
                                 type="button"
                             >
                                 {hidePassword ? (
@@ -136,12 +144,14 @@ export default function Register() {
                     </span>
                 </p>
             </div>
-            {/* {!isNotFilled && (
-                <Alert variant="destructive" className="max-w-xs w-full flex items-center justify-center fixed top-12 ">
-                    <AlertCircleIcon />
-                    <AlertTitle>Unable to process your payment.</AlertTitle>
-                </Alert>
-            )} */}
+
+            {/* Alert message */}
+            {isNotFilled && (
+                <Alert variant="error" msg="Harap isi semua field!" />
+            )}
+            {Object.keys(errors) > 0 && (
+                <Alert variant="error" msg={errors.email} />
+            )}
         </div>
     );
 }

@@ -25,10 +25,10 @@ export default function Dashboard() {
     return (
         <AppLayout>
             <Head title="Dashboard" />
-            <div className="max-w-[980px] w-full">
+            <div className="max-w-[960px] w-full">
                 <div className="w-full flex justify-between items-center ">
                     <div className="flex items-center gap-[1rem]">
-                        <div className="bg-tertiary p-[0.8rem] rounded-lg">
+                        <div className="bg-tertiary p-[0.8rem] rounded-lg shadow-md">
                             <LayoutDashboard size={25} />
                         </div>
                         <h1 className="md:text-4xl text-3xl font-bold">

@@ -3,6 +3,7 @@ import { router, useForm } from "@inertiajs/react";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react"; // Import Mail dan Lock
 import { Spinner } from "@/Components/ui/spinner";
 import Alert from "@/Components/Alert";
+import Title from "@/Components/Title";
 
 export default function Login() {
     const [isNotFilled, setIsNotFilled] = useState(false);
@@ -43,7 +44,7 @@ export default function Login() {
     return (
         <div className="h-screen flex flex-col justify-center items-center gap-[1.5rem]">
             <div className="logo text-center">
-                <h1 className="font-bold text-4xl">NutriQ</h1>
+                <Title text="NutriQ" />
                 <p className="text-lg">Lanjutkan perjalanan sehat Anda!</p>
             </div>
             <div className="card md:max-w-[330px] max-w-xs w-full p-[1.5rem] rounded-2xl bg-white shadow-lg">
@@ -83,7 +84,7 @@ export default function Login() {
                             {/* hide password button */}
                             <button
                                 onClick={() => setHidePassword(!hidePassword)}
-                                className="w-5 h-5 cursor-pointer opacity-60 absolute right-3 transition-opacity duration-200 hover:opacity-100" // right-3 untuk posisi tombol mata
+                                className="w-5 h-5 cursor-pointer opacity-60 absolute right-3 " // right-3 untuk posisi tombol mata
                                 type="button"
                             >
                                 {hidePassword ? (
@@ -119,8 +120,13 @@ export default function Login() {
                 </p>
             </div>
 
-            {isNotFilled && <Alert msg="Harap isi semua field!" />}
-            {Object.keys(errors) > 0 && <Alert msg={errors.email} />}
+            {/* Alert message */}
+            {isNotFilled && (
+                <Alert variant="error" msg="Harap isi semua field!" />
+            )}
+            {Object.keys(errors) > 0 && (
+                <Alert variant="error" msg={errors.email} />
+            )}
         </div>
     );
 }

@@ -44,12 +44,10 @@ export default function ScanMakanan() {
             <div className="max-w-3xl w-full">
                 {/* Title */}
                 <div className="flex items-center gap-[1rem]">
-                    <div className="bg-tertiary p-[0.8rem] rounded-lg">
+                    <div className="bg-tertiary p-[0.8rem] rounded-lg shadow-md">
                         <ScanLine size={25} />
                     </div>
-                    <h1 className="md:text-4xl text-3xl font-bold">
-                        Scan Makanan
-                    </h1>
+                    <Title text="Scan Makaanan"/>
                 </div>
 
                 <p className="md:text-xl text-lg opacity-80 md:max-w-[80%] w-full mt-[1rem]">
@@ -128,7 +126,7 @@ export default function ScanMakanan() {
 
                     {/* Upload Area */}
                     <div
-                        className="border-2 border-dashed border-[#A8C48C] bg-white rounded-xl w-full min-h-[260px] flex flex-col justify-center items-center text-center cursor-pointer hover:bg-secondary/50 transition"
+                        className="border-2 border-dashed border-tertiary bg-white rounded-xl w-full min-h-[300px] flex flex-col justify-center items-center text-center cursor-pointer hover:bg-secondary/50 transition"
                         onClick={() =>
                             document.getElementById("foodImage").click()
                         }

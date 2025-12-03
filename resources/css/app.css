@@ -32,5 +32,14 @@
     }
 }
 
+/* Untuk Browser Berbasis WebKit (Chrome, Safari, Opera) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* Menghilangkan tampilan default WebKit */
+    margin: 0; /* Penting untuk Firefox jika Anda menggunakan margin kustom */
+}
 
-
+/* Untuk Mozilla Firefox */
+input[type="number"] {
+    -moz-appearance: textfield; /* Mengubah tampilan kembali ke text field biasa */
+}
