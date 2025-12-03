@@ -19,7 +19,7 @@ class MakananController extends Controller
     public function generate_makanan(Request $request, GeminiService $gemini)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // Max 5MB
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
             'tanggal' => 'required|date',
             'jam' => 'required'
         ]);
@@ -27,12 +27,19 @@ class MakananController extends Controller
         $file = $request->file('image');
         $hasil = $gemini->generateMakanan($file);
 
-        if (!$hasil) {
-            return back()->withErrors(['error' => 'Gagal menganalisis gambar makanan.']);
+        if (isset($hasil['error'])) {
+            $pesan = match($hasil['error']) {
+                'bukan_makanan' => 'Gambar tidak terdeteksi sebagai makanan.',
+                'api_gagal' => 'Layanan analisis tidak merespon.',
+                'json_tidak_valid' => 'Respon dari AI tidak valid.',
+                'struktur_tidak_lengkap' => 'Struktur data analisis tidak lengkap.',
+                default => 'Gagal menganalisis gambar makanan.'
+            };
+
+            return back()->withErrors(['error' => $pesan]);
         }
 
         $path = $file->store('makanan', 'public');
-
         $user = Auth::user();
 
         $makanan = Makanan::create([
@@ -40,7 +47,7 @@ class MakananController extends Controller
             'nama' => $hasil['nama'],
             'tanggal' => $request->tanggal,
             'jam' => $request->jam,
-            'foto' => '/storage/' . $path, // Simpan path gambar
+            'foto' => '/storage/' . $path,
             'total_kalori' => $hasil['total']['total_kalori'],
             'total_protein' => $hasil['total']['total_protein'],
             'total_karbohidrat' => $hasil['total']['total_karbohidrat'],
@@ -64,9 +71,9 @@ class MakananController extends Controller
             ]);
         }
 
-       return redirect()->route('riwayat.show', $makanan->slug);
-
+        return redirect()->route('riwayat.show', $makanan->slug);
     }
+
     public function show($slug)
     {
         $userId = Auth::id();
