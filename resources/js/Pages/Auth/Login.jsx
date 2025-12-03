@@ -4,6 +4,8 @@ import { Eye, EyeOff, Mail, Lock } from "lucide-react"; // Import Mail dan Lock
 import { Spinner } from "@/Components/ui/spinner";
 import Alert from "@/Components/Alert";
 import Title from "@/Components/Title";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
 
 export default function Login() {
     const [isNotFilled, setIsNotFilled] = useState(false);
@@ -37,48 +39,46 @@ export default function Login() {
     // **Definisi Class yang Konsisten dengan Halaman Register (Shadcn-like)**
     const inputWrapperClass =
         "relative flex items-center bg-white rounded-lg border border-gray-300 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/50 focus-within:ring-offset-0 transition-all duration-200";
-    const inputFieldClass =
-        "bg-transparent outline-none rounded-lg w-full py-2 pl-10 pr-4 text-gray-800 placeholder:text-gray-400 focus:ring-0 focus:border-0";
     const iconClass = "w-5 h-5 ml-3 text-gray-400 absolute";
 
     return (
         <div className="h-screen flex flex-col justify-center items-center gap-[1.5rem]">
             <div className="logo text-center">
-                <Title text="NutriQ" />
+                <Title text="NutriQ" className="text-quartenary text-4xl"/>
                 <p className="text-lg">Lanjutkan perjalanan sehat Anda!</p>
             </div>
             <div className="card md:max-w-[330px] max-w-xs w-full p-[1.5rem] rounded-2xl bg-white shadow-lg">
                 <form onSubmit={handeLogin} className="flex flex-col">
                     {/* Input Email */}
                     <div className="flex flex-col gap-[0.5rem]">
-                        <label htmlFor="" className="font-medium text-gray-700">
+                        <Label htmlFor="" className="font-medium text-gray-700">
                             Email
-                        </label>
+                        </Label>
                         <div className={inputWrapperClass}>
                             <Mail className={iconClass} /> {/* Ikon Mail */}
-                            <input
+                            <Input
                                 type="text"
+                                className="pl-[2.5rem] py-[1.4rem]"
                                 onChange={(e) =>
                                     setData("email", e.target.value)
                                 }
-                                className={inputFieldClass} // Class dengan pl-10
                                 placeholder="example@gmail.com"
                             />
                         </div>
                     </div>
                     {/* Input Password */}
                     <div className="flex flex-col gap-[0.5rem] mt-[1rem]">
-                        <label htmlFor="" className="font-medium text-gray-700">
+                        <Label className="font-medium text-gray-700">
                             Password
-                        </label>
+                        </Label>
                         <div className={inputWrapperClass}>
                             <Lock className={iconClass} /> {/* Ikon Lock */}
-                            <input
+                            <Input
                                 type={hidePassword ? "password" : "text"}
+                                className="pl-[2.5rem] py-[1.4rem]"
                                 onChange={(e) =>
                                     setData("password", e.target.value)
                                 }
-                                className={`${inputFieldClass} pr-12`} // pl-10 untuk ikon Lock, pr-12 untuk tombol Eye
                                 placeholder="masukkan password..."
                             />
                             {/* hide password button */}

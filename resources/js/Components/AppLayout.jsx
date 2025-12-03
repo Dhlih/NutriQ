@@ -1,5 +1,6 @@
 import { Link, router, useForm, usePage } from "@inertiajs/react";
 import { LayoutDashboard, History, Soup, ScanLine } from "lucide-react";
+import Title from "./Title";
 
 export default function AppLayout({ children }) {
     const { url, props } = usePage();
@@ -42,8 +43,7 @@ export default function AppLayout({ children }) {
                 {/* Logo + Brand */}
                 <div>
                     <div className="flex items-center gap-3 mb-8">
-                        {/* <div className="w-10 h-10 rounded-full bg-quartenary" /> */}
-                        <span className="text-2xl font-semibold">NutriQ</span>
+                        <Title text="NutriQ"/>
                     </div>
 
                     {/* Menu Items */}
@@ -69,26 +69,26 @@ export default function AppLayout({ children }) {
                 {/* User Section */}
                 <div className="flex items-center gap-3">
                     <div className="w-14 h-14 rounded-full bg-quartenary flex items-center justify-center text-white font-semibold">
-                        <span className="text-xl">
+                        <span className="text-xl" >
                             {user?.name?.slice(0, 2).toUpperCase() ?? "US"}
                         </span>
                     </div>
                     <div>
-                        <p className="font-semibold text-lg">
+                        <p className="font-semibold text-lg hover:underline cursor-pointer" onClick={() => router.visit("/profil")}>
                             {user?.name ?? "User"}
                         </p>
                         <button
-                            className="text-gray-700 hover:underline "
-                            onClick={() => router.visit("/profil")}
+                            className="text-gray-700 hover:text-gray-700/70"
+                            onClick={handleLogout}
                         >
-                            View profile
+                            Logout
                         </button>
                     </div>
                 </div>
             </aside>
 
             {/* CONTENT */}
-            <main className="flex-1 lg:ml-[19rem] sm:ml-[17rem] ml-0 md:px-[4rem] py-[3rem] p-[2rem] w-full">
+            <main className="flex-1 lg:ml-[18.5rem] sm:ml-[17rem] ml-0 md:px-[4rem] py-[3rem] p-[2rem] w-full">
                 {children}
             </main>
         </div>

@@ -50,9 +50,9 @@ export default function Profil() {
                     <Title text="NutriQ" />
                 </div>
 
-                <p className="md:text-xl text-lg opacity-80 md:max-w-[80%] w-full mt-[1rem]">
-                    Perbarui data diri Anda agar perhitungan target nutrisi
-                    tetap akurat.
+                <p className="md:text-xl text-lg opacity-80 md:max-w-[80%] w-full mt-[1.5rem]">
+                    Perbarui data diri Anda agar kami dapat memastikan
+                    perhitungan target nutrisi harian tetap akurat dan relevan
                 </p>
 
                 <form

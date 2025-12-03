@@ -50,7 +50,7 @@ export default function ScanMakanan() {
                     <Title text="Scan Makaanan"/>
                 </div>
 
-                <p className="md:text-xl text-lg opacity-80 md:max-w-[80%] w-full mt-[1rem]">
+                <p className="md:text-xl text-lg opacity-80 md:max-w-[80%] w-full mt-[1.5rem]">
                     Unggah gambar makanan Anda dan kami akan menganalisis
                     nutrisi yang ada pada makanan secara otomatis!
                 </p>
