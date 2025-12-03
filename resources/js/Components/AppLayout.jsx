@@ -52,7 +52,7 @@ export default function AppLayout({ children }) {
 
             <div className="min-h-screen flex bg-[#F1F3E0]">
                 {/* SIDEBAR */}
-                <aside className="lg:max-w-[300px] max-w-[270px] fixed top-0 left-0 bottom-0 w-full p-6 md:flex hidden flex-col justify-between bg-secondary">
+                <aside className="lg:max-w-[300px] max-w-[270px] fixed top-0 left-0 bottom-0 w-full p-6 md:flex hidden flex-col justify-between bg-[#D2DCB6]">
                     <div>
                         <div className="flex items-center gap-3 mb-8">
                             <span className="text-2xl font-semibold">
