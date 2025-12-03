@@ -1,3 +1,6 @@
+import { DatePickerDropdown } from "@/Components/ui/date-picker-dropdown";
+import { TimePickerDropdown } from "@/Components/ui/time-picker-dropdown";
+
 import React, { useState, useRef } from "react";
 import { Head, useForm } from "@inertiajs/react";
 import { Calendar, Clock, Image as ImageIcon, Loader2 } from "lucide-react";
@@ -86,10 +89,10 @@ export default function ScanMakanan() {
 
     return (
         <AppLayout>
-            <div>
+            <div className="w-full min-h-screen">
                 <Head title="Scan Makanan" />
 
-                <div className="max-w-3xl w-full">
+                <div className="w-full">
                     <h1 className="md:text-4xl text-3xl font-bold">
                         Scan Makanan
                     </h1>
@@ -111,27 +114,24 @@ export default function ScanMakanan() {
                                 <Label className="text-[15px] text-lg font-medium text-black">
                                     Tanggal
                                 </Label>
-                                <div className="relative w-full">
-                                    <Input
-                                        id="tanggalInput"
-                                        type="date"
-                                        className="w-full bg-white border border-[#C7D2AB] rounded-lg 
-                                        text-black py-[1.4rem] px-[1rem] 
-                                        [&::-webkit-calendar-picker-indicator]:opacity-0"
-                                        value={data.tanggal}
-                                        onChange={(e) =>
-                                            setData("tanggal", e.target.value)
+
+                                <DatePickerDropdown
+                                    value={
+                                        data.tanggal
+                                            ? new Date(data.tanggal)
+                                            : null
+                                    }
+                                    onChange={(date) => {
+                                        if (!date) {
+                                            setData("tanggal", "");
+                                            return;
                                         }
-                                    />
-                                    <Calendar
-                                        className="absolute right-3 top-3.5 h-5 w-5 text-gray-600 cursor-pointer"
-                                        onClick={() =>
-                                            document
-                                                .getElementById("tanggalInput")
-                                                .showPicker()
-                                        }
-                                    />
-                                </div>
+                                        const formatted = date
+                                            .toISOString()
+                                            .split("T")[0];
+                                        setData("tanggal", formatted);
+                                    }}
+                                />
                             </div>
 
                             {/* Jam */}
@@ -139,29 +139,11 @@ export default function ScanMakanan() {
                                 <Label className="text-[15px] text-lg font-medium text-black">
                                     Jam
                                 </Label>
-                                <div className="relative w-full flex items-center">
-                                    <Input
-                                        id="jamInput"
-                                        type="time"
-                                        className="w-full bg-white border border-[#C7D2AB] rounded-lg 
-                                        text-black py-[1.4rem] px-[1rem]
-                                        [&::-webkit-calendar-picker-indicator]:opacity-0
-                                        [&::-webkit-inner-spin-button]:appearance-none"
-                                        value={data.jam}
-                                        onChange={(e) =>
-                                            setData("jam", e.target.value)
-                                        }
-                                    />
 
-                                    <Clock
-                                        className="absolute right-3 top-3.5 h-5 w-5 text-gray-600 cursor-pointer"
-                                        onClick={() =>
-                                            document
-                                                .getElementById("jamInput")
-                                                .showPicker()
-                                        }
-                                    />
-                                </div>
+                                <TimePickerDropdown
+                                    value={data.jam}
+                                    onChange={(val) => setData("jam", val)}
+                                />
                             </div>
                         </div>
 
