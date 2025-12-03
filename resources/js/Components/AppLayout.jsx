@@ -1,5 +1,11 @@
 import { Link, router, useForm, usePage } from "@inertiajs/react";
-import { LayoutDashboard, History, Soup, ScanLine } from "lucide-react";
+import {
+    LayoutDashboard,
+    History,
+    Soup,
+    ScanLine,
+    ScanSearch,
+} from "lucide-react";
 
 export default function AppLayout({ children }) {
     const { url, props } = usePage();
