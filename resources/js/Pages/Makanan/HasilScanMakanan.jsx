@@ -11,6 +11,11 @@ export default function HasilScan({ makanan }) {
 
                 {/* Header */}
                 <div className="flex justify-between items-start mb-8">
+                    <Link href={route("riwayat.index")}>
+                        <Button className="bg-[#6E8F5C] text-white px-4 rounded-lg hover:bg-green-800">
+                            Kembali
+                        </Button>
+                    </Link>
                     <h1 className="text-3xl font-semibold">
                         Hasil Scan Makanan
                     </h1>
