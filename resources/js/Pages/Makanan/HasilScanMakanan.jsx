@@ -6,13 +6,13 @@ import AppLayout from "@/Components/AppLayout";
 export default function HasilScan({ makanan }) {
     return (
         <AppLayout>
-            <div className="min-h-screen p-10 bg-[#F1F3E0]">
+            <div className="w-full min-h-screen bg-[#F1F3E0]">
                 <Head title="Hasil Scan" />
 
                 {/* Header */}
                 <div className="flex justify-between items-start mb-8">
                     <Link href={route("riwayat.index")}>
-                        <Button className="bg-[#6E8F5C] text-white px-4 rounded-lg hover:bg-green-800">
+                        <Button className="bg-[#6E8F5C] text-white px-4 rounded-lg hover:bg-[#5d7d4d]">
                             Kembali
                         </Button>
                     </Link>

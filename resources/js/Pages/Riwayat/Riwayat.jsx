@@ -185,7 +185,7 @@ export default function Riwayat({ makanans, filters }) {
                                             <Link
                                                 href={`/riwayat/${item.slug}`}
                                             >
-                                                <Button className="bg-green-600 text-white hover:bg-green-700">
+                                                <Button className="bg-[#6E8F5C] text-white hover:bg-[#5d7d4d]">
                                                     Detail
                                                 </Button>
                                             </Link>
@@ -208,9 +208,9 @@ export default function Riwayat({ makanans, filters }) {
                         const isDisabled = !link.url;
 
                         const label = link.label.includes("Previous")
-                            ? "«"
+                            ? "<"
                             : link.label.includes("Next")
-                            ? "»"
+                            ? ">"
                             : link.label;
 
                         return (
