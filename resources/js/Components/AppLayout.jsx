@@ -5,7 +5,9 @@ import {
     Soup,
     ScanLine,
     ScanSearch,
+    LogOut,
 } from "lucide-react";
+
 import { Toaster } from "sonner"; // <-- ini yang bener
 
 export default function AppLayout({ children }) {
@@ -52,7 +54,7 @@ export default function AppLayout({ children }) {
 
             <div className="min-h-screen flex bg-[#F1F3E0]">
                 {/* SIDEBAR */}
-                <aside className="lg:max-w-[300px] max-w-[270px] fixed top-0 left-0 bottom-0 w-full p-6 md:flex hidden flex-col justify-between bg-[#D2DCB6]">
+                <aside className="lg:max-w-[300px] max-w-[270px] fixed top-0 left-0 bottom-0 w-full p-6 md:flex hidden flex-col justify-between bg-[#D2DCB6] shadow-lg">
                     <div>
                         <div className="flex items-center gap-3 mb-8">
                             <span className="text-2xl font-semibold">
@@ -79,23 +81,31 @@ export default function AppLayout({ children }) {
                         </nav>
                     </div>
 
-                    <div className="flex items-center gap-3">
-                        <div className="w-14 h-14 rounded-full bg-quartenary flex items-center justify-center text-white font-semibold">
-                            <span className="text-xl">
-                                {user?.name?.slice(0, 2).toUpperCase() ?? "US"}
-                            </span>
+                    <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                            <div className="w-14 h-14 rounded-full bg-quartenary flex items-center justify-center text-white font-semibold">
+                                <span className="text-xl">
+                                    {user?.name?.slice(0, 2).toUpperCase() ??
+                                        "US"}
+                                </span>
+                            </div>
+                            <div>
+                                <p className="font-semibold text-lg">
+                                    {user?.name ?? "User"}
+                                </p>
+                                <button
+                                    className="text-gray-700 hover:underline "
+                                    onClick={() => router.visit("/profil")}
+                                >
+                                    View profile
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <p className="font-semibold text-lg">
-                                {user?.name ?? "User"}
-                            </p>
-                            <button
-                                className="text-gray-700 hover:underline "
-                                onClick={() => router.visit("/profil")}
-                            >
-                                View profile
-                            </button>
-                        </div>
+
+                        <LogOut
+                            className="text-red-500 cursor-pointer hover:text-red-500/50"
+                            onClick={handleLogout}
+                        />
                     </div>
                 </aside>
 

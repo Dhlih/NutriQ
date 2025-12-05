@@ -15,6 +15,7 @@ import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import AppLayout from "@/Components/AppLayout";
 import Title from "@/Components/Title";
+import { Card } from "@/Components/ui/card";
 
 export default function Profil() {
     const [preview, setPreview] = useState(null);
@@ -55,101 +56,105 @@ export default function Profil() {
                     perhitungan target nutrisi harian tetap akurat dan relevan
                 </p>
 
-                <form
-                    onSubmit={handleUpdate}
-                    className="max-w-xl w-full b mt-[1rem] flex flex-col gap-[1.5rem]"
-                >
-                    {/* Field Nama */}
-                    <div className="flex flex-col gap-[0.5rem]">
-                        <Label className="text-lg font-medium">Nama</Label>
-                        <div className="relative">
-                            <User className={iconClass} />
-                            <Input
-                                type="text"
-                                className={inputWithIconClass}
-                                placeholder="masukkan nama"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                        {/* Field Tinggi Badan */}
-                        <div className="flex flex-col gap-[0.5rem] w-[47%]">
-                            <Label className="text-lg font-medium">
-                                Tinggi badan
-                            </Label>
+                <Card className="py-[1rem] px-[1.5rem] w-[80%] mt-[2rem] rounded-2xl">
+                    <form
+                        onSubmit={handleUpdate}
+                        className="max-w-xl w-full b mt-[1rem] flex flex-col gap-[1.5rem]"
+                    >
+                        {/* Field Nama */}
+                        <div className="flex flex-col gap-[0.5rem]">
+                            <Label className="text-lg font-medium">Nama</Label>
                             <div className="relative">
-                                <Ruler className={iconClass} />
-                                <Input
-                                    type="number"
-                                    className={inputWithIconClass}
-                                    placeholder="masukkan tinggi badan (cm)"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Field Berat Badan */}
-                        <div className="flex flex-col gap-[0.5rem] w-[47%]">
-                            <Label className="text-lg font-medium">
-                                Berat badan
-                            </Label>
-                            <div className="relative">
-                                <Weight className={iconClass} />
-                                <Input
-                                    type="number"
-                                    placeholder="masukkan berat badan (kg)"
-                                    className={inputWithIconClass}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                        {/* Field Umur */}
-                        <div className="flex flex-col gap-[0.5rem] w-[47%]">
-                            <Label className="text-lg font-medium">Umur</Label>
-                            <div className="relative">
-                                <Calendar className={iconClass} />
-                                <Input
-                                    type="number"
-                                    className={inputWithIconClass}
-                                    placeholder="masukkan umur"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Field Jenis Kelamin */}
-                        <div className="flex flex-col gap-[0.5rem] w-[47%]">
-                            <Label className="text-lg font-medium">
-                                Jenis kelamin
-                            </Label>
-                            <div className="relative">
-                                <Users className={iconClass} />
+                                <User className={iconClass} />
                                 <Input
                                     type="text"
                                     className={inputWithIconClass}
-                                    placeholder="masukkan jenis kelamin"
+                                    placeholder="masukkan nama"
                                 />
                             </div>
                         </div>
-                    </div>
 
-                    {/* Button group  */}
-                    <div className="flex md:flex-row flex-col justify-end items-center gap-[1.5rem] mt-[1.5rem]">
-                        <Button
-                            type="button"
-                            className="bg-quartenary md:w-auto w-full md:order-1 order-2 p-[1.6rem] text-lg text-white hover:bg-tertiary/80"
-                        >
-                            Batal
-                        </Button>
-                        <Button
-                            type="submit"
-                            className="bg-quartenary md:w-auto w-full md:order-2 order-1 p-[1.6rem] text-lg text-white hover:bg-tertiary/80"
-                        >
-                            Simpan
-                        </Button>
-                    </div>
-                </form>
+                        <div className="flex items-center justify-between">
+                            {/* Field Tinggi Badan */}
+                            <div className="flex flex-col gap-[0.5rem] w-[48%]">
+                                <Label className="text-lg font-medium">
+                                    Tinggi badan
+                                </Label>
+                                <div className="relative">
+                                    <Ruler className={iconClass} />
+                                    <Input
+                                        type="number"
+                                        className={inputWithIconClass}
+                                        placeholder="masukkan tinggi badan (cm)"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Field Berat Badan */}
+                            <div className="flex flex-col gap-[0.5rem] w-[48%]">
+                                <Label className="text-lg font-medium">
+                                    Berat badan
+                                </Label>
+                                <div className="relative">
+                                    <Weight className={iconClass} />
+                                    <Input
+                                        type="number"
+                                        placeholder="masukkan berat badan (kg)"
+                                        className={inputWithIconClass}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            {/* Field Umur */}
+                            <div className="flex flex-col gap-[0.5rem] w-[48%]">
+                                <Label className="text-lg font-medium">
+                                    Umur
+                                </Label>
+                                <div className="relative">
+                                    <Calendar className={iconClass} />
+                                    <Input
+                                        type="number"
+                                        className={inputWithIconClass}
+                                        placeholder="masukkan umur"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Field Jenis Kelamin */}
+                            <div className="flex flex-col gap-[0.5rem] w-[48%]">
+                                <Label className="text-lg font-medium">
+                                    Jenis kelamin
+                                </Label>
+                                <div className="relative">
+                                    <Users className={iconClass} />
+                                    <Input
+                                        type="text"
+                                        className={inputWithIconClass}
+                                        placeholder="masukkan jenis kelamin"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Button group  */}
+                        <div className="flex md:flex-row flex-col justify-end items-center gap-[1.5rem] mt-[1rem]">
+                            <Button
+                                type="button"
+                                className="bg-quartenary md:w-auto w-full md:order-1 order-2 p-[1.5rem] text-lg text-white hover:bg-tertiary/80"
+                            >
+                                Batal
+                            </Button>
+                            <Button
+                                type="submit"
+                                className="bg-quartenary md:w-auto w-full md:order-2 order-1 p-[1.5rem] text-lg text-white hover:bg-tertiary/80"
+                            >
+                                Simpan
+                            </Button>
+                        </div>
+                    </form>
+                </Card>
             </div>
         </AppLayout>
     );

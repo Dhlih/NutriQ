@@ -36,9 +36,9 @@ export default function Dashboard() {
                             Dashboard
                         </h1>
                     </div>
-                    <button className="bg-tertiary hover:bg-tertiary/80 p-[0.6rem] rounded-xl flex items-center gap-[0.5rem] shadow-md">
+                    <button className="bg-white hover:bg-white/80 py-[0.6rem] px-[1rem] rounded-full flex items-center gap-[0.5rem] shadow-md">
                         <Calendar size={18} />
-                        <span className="md:text-lg">Hari ini</span>
+                        <span>12 Desember 2025</span>
                     </button>
                 </div>
                 <p className="md:text-xl text-lg opacity-80 md:max-w-[65%] w-full mt-[1.5rem]">

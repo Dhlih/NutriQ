@@ -39,7 +39,7 @@ export default function Register() {
         if (isNotFilled) {
             const timer = setTimeout(() => {
                 setIsNotFilled(false);
-            }, 3000); // Diperlama sedikit agar user sempat baca
+            }, 1500); // Diperlama sedikit agar user sempat baca
             return () => clearTimeout(timer);
         }
     }, [isNotFilled]);

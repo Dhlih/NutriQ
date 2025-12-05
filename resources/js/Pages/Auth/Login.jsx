@@ -32,7 +32,7 @@ export default function Login() {
         if (isNotFilled) {
             const timer = setTimeout(() => {
                 setIsNotFilled(false);
-            }, 3000);
+            }, 1500);
             return () => clearTimeout(timer);
         }
     }, [isNotFilled]);
