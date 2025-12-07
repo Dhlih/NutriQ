@@ -49,9 +49,6 @@ class GeminiService
         return null;
     }
 
-    /* =======================================================================
-       HITUNG KEBUTUHAN MAKAN - MENGGUNAKAN FALLBACK API KEY
-       ======================================================================= */
     public function hitungKebutuhan($user)
     {
         $prompt = "
