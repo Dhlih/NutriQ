@@ -49,9 +49,6 @@ class GeminiService
         return null;
     }
 
-    /* =======================================================================
-       HITUNG KEBUTUHAN MAKAN - MENGGUNAKAN FALLBACK API KEY
-       ======================================================================= */
     public function hitungKebutuhan($user)
     {
         $prompt = "
@@ -129,9 +126,7 @@ class GeminiService
         return $json;
     }
 
-    /* =======================================================================
-       GENERATE MAKANAN (ANALISIS GAMBAR) - PAKAI FALLBACK
-       ======================================================================= */
+
     public function generateMakanan($imageFile)
     {
         $imageData = base64_encode(file_get_contents($imageFile->getRealPath()));
