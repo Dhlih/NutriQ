@@ -1,45 +1,44 @@
-import { useState } from "react"; // 1. Import useState
+import { useState } from "react";
 import { Mars, Venus } from "lucide-react";
 import Title from "../Title";
 import SelectBox from "../SelectBox";
 
-export default function JenisKelamin({ setData, data }) {
-    // 2. State untuk menyimpan pilihan yang aktif
-    const [selectedGender, setSelectedGender] = useState(null);
 
-    // 3. Fungsi untuk menangani klik tombol
+export default function JenisKelamin({ setData, data }) {
+    const [selectedGender, setSelectedGender] = useState(
+        data.jenis_kelamin || null
+    );
+
     const handleGenderSelect = (gender) => {
-        // alert("memilih kelamin")
-        setSelectedGender(gender); // Perbarui state aktif
-        setData("jenis_kelamin", gender); // Perbarui data formulir induk
+        setSelectedGender(gender);
+        setData("jenis_kelamin", gender);
     };
 
     return (
-        <div className="flex flex-col items-center pb-[5rem]">
-            <span className="text-xl opacity-80">Pertanyaan 2/4</span>
-            <Title text={"Apa jenis kelamin Anda?"} className="text-center" />
-            <div className="flex md:gap-[3rem] gap-[2rem] items-center mt-[2.5rem] ">
+        <div className="w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Icon Visual */}
+
+            <Title
+                text="Apa jenis kelamin Anda?"
+                className="text-3xl md:text-4xl font-bold text-center text-[#2C3A2C] mb-4"
+            />
+
+            <div className="flex md:gap-8 gap-6 items-center justify-center md:w-full w-[90%] mt-8">
                 <SelectBox
-                    label={"Laki-laki"}
+                    label="Laki-laki"
                     icon={Mars}
-                    // 4. Tentukan apakah tombol ini aktif
-                    active={
-                        selectedGender == "Laki-laki" ||
-                        data.jenis_kelamin === "Laki-laki"
-                    }
-                    // 5. Panggil handler baru saat diklik
+                    active={selectedGender === "Laki-laki"}
                     onClick={() => handleGenderSelect("Laki-laki")}
+                    className="w-40 h-40 p-[1.8rem]"
+                    iconSize={42}
                 />
                 <SelectBox
-                    label={"Perempuan"}
+                    label="Perempuan"
                     icon={Venus}
-                    // 4. Tentukan apakah tombol ini aktif
-                    active={
-                        selectedGender == "Perempuan" ||
-                        data.jenis_kelamin === "Perempuan"
-                    }
-                    // 5. Panggil handler baru saat diklik
+                    active={selectedGender === "Perempuan"}
                     onClick={() => handleGenderSelect("Perempuan")}
+                    className="w-40 h-40 p-[1.8rem]"
+                    iconSize={42}
                 />
             </div>
         </div>

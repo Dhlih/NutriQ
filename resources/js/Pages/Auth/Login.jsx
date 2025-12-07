@@ -36,19 +36,14 @@ export default function Login() {
         }
     }, [isNotFilled]);
 
-    // --- STYLE CLASSES YANG DIPERBARUI ---
-    // Menggunakan border #D5E1C3 dan focus ring #7A9E7E (Sage)
     const inputWrapperClass =
         "relative flex items-center bg-white rounded-xl border border-[#D5E1C3] focus-within:border-[#7A9E7E] focus-within:ring-2 focus-within:ring-[#7A9E7E]/20 focus-within:ring-offset-0 transition-all duration-200";
 
-    // Icon warna muted sage
     const iconClass = "w-5 h-5 ml-3 text-[#5C6F5C] absolute";
 
     return (
-        // Background Cream Terang (#F7F9F0)
         <div className="min-h-screen flex flex-col justify-center items-center gap-[1.5rem] bg-[#F7F9F0] text-[#2C3A2C] font-sans p-4">
             <div className="logo text-center">
-                {/* Menggunakan warna Dark Green */}
                 <Title
                     text="NutriQ"
                     className="text-[#2C3A2C] text-4xl font-bold tracking-tight"
@@ -122,7 +117,6 @@ export default function Login() {
 
                     <button
                         type="submit"
-                        // Tombol Sage Green (#7A9E7E) dengan Hover lebih gelap
                         className={`mt-8 bg-[#7A9E7E] text-white py-3 rounded-xl font-bold hover:bg-[#5C6F5C] hover:shadow-lg hover:shadow-[#7A9E7E]/20 flex items-center justify-center transition-all duration-200 active:scale-95`}
                         disabled={processing}
                     >
@@ -147,7 +141,7 @@ export default function Login() {
 
             {isNotFilled && (
                 <div className="fixed top-10 z-50">
-                    <Alert variant="error" msg="Harap isi semua field!" />
+                    <Alert variant="warning" title="Harap isi semua field!" />
                 </div>
             )}
         </div>

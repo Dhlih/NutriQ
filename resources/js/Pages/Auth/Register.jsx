@@ -26,7 +26,6 @@ export default function Register() {
         }
 
         if (data.password.length < 8) {
-            // Sebaiknya gunakan Alert UI daripada window.alert, tapi ini ok untuk sementara
             alert("Password minimal 8 karakter!");
             return;
         }
@@ -77,7 +76,7 @@ export default function Register() {
                                 onChange={(e) =>
                                     setData("name", e.target.value)
                                 }
-                                placeholder="Nama Lengkap"
+                                placeholder="Nama "
                             />
                         </div>
                         {errors.name && (
@@ -174,15 +173,15 @@ export default function Register() {
             {/* Global Alerts */}
             {isNotFilled && (
                 <div className="fixed top-10 z-50">
-                    <Alert variant="error" msg="Harap isi semua field!" />
+                    <Alert variant="warning" title="Harap isi semua field!" />
                 </div>
             )}
 
-            {errors.error && (
+            {/* {errors.error && (
                 <div className="fixed top-24 z-50">
                     <Alert variant="error" msg={errors.error} />
                 </div>
-            )}
+            )} */}
         </div>
     );
 }

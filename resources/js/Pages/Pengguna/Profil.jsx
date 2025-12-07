@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { Head, useForm, usePage } from "@inertiajs/react";
 import {
-    Calendar,
-    User,
     Ruler,
     Weight,
-    Users,
     Pencil,
     Loader2,
     Save,
     X,
+    MarsStroke,
+    User,
+    Cake,
 } from "lucide-react";
 
 import { Button } from "@/Components/ui/button";
@@ -20,18 +20,18 @@ import AppLayout from "@/Components/AppLayout";
 import useNotify from "@/Components/ToastNotification"; // Asumsi Anda punya ini dari step sebelumnya
 
 export default function Profil() {
-    // Mengambil data user dari props (jika ada data awal)
-    const { auth } = usePage().props;
-    const user = auth?.user || {};
+    // Mengambil data pengguna dari props (jika ada data awal)
+    const { pengguna } = usePage().props;
+    console.log(pengguna);
 
     const { notifySuccess, notifyError } = useNotify();
 
     const { data, setData, put, processing, errors } = useForm({
-        nama: user.name || "",
-        tinggi: user.tinggi_badan || "",
-        berat: user.berat_badan || "",
-        jenis_kelamin: user.jenis_kelamin || "",
-        umur: user.umur || "",
+        nama: pengguna.name || "",
+        tinggi: pengguna.tinggi || "",
+        berat: pengguna.berat || "",
+        jenis_kelamin: pengguna.jenis_kelamin || "",
+        umur: pengguna.umur || "",
     });
 
     const handleUpdate = (e) => {
@@ -57,10 +57,10 @@ export default function Profil() {
 
     return (
         <AppLayout>
-            <Head title="NutriQ | Profil" />
+            <Head title="Profil" />
 
             <div className="min-h-screen w-full bg-[#F7F9F0] pb-10">
-                <div className="max-w-4xl mx-auto w-full pt-6">
+                <div className="max-w-3xl mx-auto w-full pt-6">
                     {/* Header Section */}
                     <div className="flex flex-col md:flex-row md:items-center gap-4 mb-8 border-b border-[#D5E1C3] pb-6">
                         <div className="bg-[#E9EFDB] p-3 rounded-xl text-[#4A624E]">
@@ -82,15 +82,13 @@ export default function Profil() {
                         <form onSubmit={handleUpdate} className="space-y-6">
                             {/* NAMA */}
                             <div className="space-y-1">
-                                <Label className={labelClass}>
-                                    Nama Lengkap
-                                </Label>
+                                <Label className={labelClass}>Nama</Label>
                                 <div className="relative">
                                     <User className={iconClass} />
                                     <Input
                                         type="text"
                                         className={inputClass}
-                                        placeholder="Masukkan nama lengkap"
+                                        placeholder="Masukkan nama"
                                         value={data.nama}
                                         onChange={(e) =>
                                             setData("nama", e.target.value)
@@ -164,7 +162,7 @@ export default function Profil() {
                                         Umur (Tahun)
                                     </Label>
                                     <div className="relative">
-                                        <Calendar className={iconClass} />
+                                        <Cake className={iconClass} />
                                         <Input
                                             type="number"
                                             className={inputClass}
@@ -188,7 +186,7 @@ export default function Profil() {
                                         Jenis Kelamin
                                     </Label>
                                     <div className="relative">
-                                        <Users className={iconClass} />
+                                        <MarsStroke className={iconClass} />
                                         <select
                                             className={`flex h-12 w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 ${inputClass} appearance-none`}
                                             value={data.jenis_kelamin}
