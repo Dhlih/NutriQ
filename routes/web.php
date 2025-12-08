@@ -26,8 +26,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/personalisasi', [UserController::class, 'index'])->name('personalisasi');
-    Route::post('/personalisasi', [UserController::class, 'store'])->name('personalisasi.store');
+    Route::middleware(['not.personalized'])->group(function () {
+        Route::get('/personalisasi', [UserController::class, 'index'])->name('personalisasi');
+        Route::post('/personalisasi', [UserController::class, 'store'])->name('personalisasi.store');
+    });
+
     Route::get('/profil', [UserController::class, 'show_profil']);
     Route::patch('/profile', [UserController::class, 'update'])->name('profil.update');
 
