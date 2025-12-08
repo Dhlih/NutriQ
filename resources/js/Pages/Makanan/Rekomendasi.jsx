@@ -1,71 +1,41 @@
-import React, { useState } from "react";
-import { Head } from "@inertiajs/react";
+import React from "react";
+import { Head, useForm } from "@inertiajs/react";
 import {
     Search,
     Wallet,
     Utensils,
-    Flame,
-    Beef,
+    Flame, // Kalori
+    Beef, // Protein
+    Wheat, // Karbohidrat
+    Droplet, // Lemak
+    Leaf, // Serat
+    Waves, // Natrium (Garam)
+    Candy, // Gula
     ChefHat,
     Loader2,
-    ArrowRight,
+    MapPin,
+    Info,
 } from "lucide-react";
 import AppLayout from "@/Components/AppLayout";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 
-// --- MOCK DATA ---
-const MOCK_RECOMMENDATIONS = [
-    {
-        id: 1,
-        nama: "Gado-gado Spesial",
-        harga: 15000,
-        kalori: 350,
-        protein: 12,
-        deskripsi: "Sayuran segar dengan bumbu kacang rendah gula.",
-    },
-    {
-        id: 2,
-        nama: "Pepes Ikan Nila",
-        harga: 22000,
-        kalori: 280,
-        protein: 24,
-        deskripsi: "Kukusan ikan rempah tanpa minyak goreng.",
-    },
-    {
-        id: 3,
-        nama: "Soto Ayam Bening",
-        harga: 18000,
-        kalori: 320,
-        protein: 18,
-        deskripsi: "Kuah bening segar dengan suwiran dada ayam.",
-    },
-    {
-        id: 4,
-        nama: "Tumis Brokoli Tahu",
-        harga: 12000,
-        kalori: 200,
-        protein: 10,
-        deskripsi: "Menu simpel kaya serat dan protein nabati.",
-    },
-];
-
-export default function Rekomendasi() {
-    const [budget, setBudget] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [recommendations, setRecommendations] = useState(null);
+export default function Rekomendasi({ rekomendasi, sisaKebutuhan, errors }) {
+    // Setup Form Inertia
+    const { data, setData, post, processing } = useForm({
+        budget: "",
+    });
 
     const handleSearch = (e) => {
         e.preventDefault();
-        if (!budget) return;
-
-        setIsLoading(true);
-        setRecommendations(null);
-
-        setTimeout(() => {
-            setIsLoading(false);
-            setRecommendations(MOCK_RECOMMENDATIONS);
-        }, 1500);
+        post(route("rekomendasi.generate"), {
+            preserveScroll: true,
+            onSuccess: () => {
+                // Scroll ke hasil jika sukses
+                const element = document.getElementById("hasil-pencarian");
+                if (element) element.scrollIntoView({ behavior: "smooth" });
+            },
+        });
     };
 
     const formatRupiah = (number) => {
@@ -73,6 +43,7 @@ export default function Rekomendasi() {
             style: "currency",
             currency: "IDR",
             minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
         }).format(number);
     };
 
@@ -82,18 +53,24 @@ export default function Rekomendasi() {
 
             <div className="min-h-screen w-full bg-[#F7F9F0] pb-20">
                 <div className="max-w-6xl mx-auto px-4 py-8">
-                    {/* Header */}
+                    {/* --- HEADER SECTION --- */}
                     <div className="text-center max-w-2xl mx-auto mb-10">
+                        <div className="inline-flex items-center justify-center p-3 bg-[#E9EFDB] rounded-full mb-4">
+                            <ChefHat className="text-[#4A624E]" size={32} />
+                        </div>
                         <h1 className="text-3xl md:text-4xl font-bold text-[#2C3A2C] mb-3 tracking-tight">
-                            Rekomendasi Menu
+                            Asisten Kuliner Pribadi
                         </h1>
-                        <p className="text-[#5C6F5C]">
-                            Cari menu sehat dan hemat sesuai budget Anda.
+                        <p className="text-[#5C6F5C] leading-relaxed">
+                            Nothy akan mencarikan menu yang pas dengan{" "}
+                            <br className="hidden md:block" />
+                            <b>sisa kebutuhan nutrisi</b> harian dan{" "}
+                            <b>budget</b> Yang Mulia.
                         </p>
                     </div>
 
-                    {/* Search Bar */}
-                    <div className="max-w-lg mx-auto bg-white p-3 rounded-2xl shadow-lg shadow-[#4A624E]/5 border border-[#D5E1C3] mb-12 relative z-10">
+                    {/* --- SEARCH BAR --- */}
+                    <div className="max-w-lg mx-auto bg-white p-3 rounded-2xl shadow-xl shadow-[#4A624E]/5 border border-[#D5E1C3] mb-12 relative z-10">
                         <form onSubmit={handleSearch} className="flex gap-2">
                             <div className="relative flex-1">
                                 <Wallet
@@ -102,114 +79,285 @@ export default function Rekomendasi() {
                                 />
                                 <Input
                                     type="number"
-                                    placeholder="Contoh: 25000"
-                                    className="pl-11 py-5 text-base border-transparent bg-[#F9FAEF] focus:bg-white focus:ring-2 focus:ring-[#7A9E7E] rounded-xl w-full text-[#2C3A2C]"
-                                    value={budget}
-                                    onChange={(e) => setBudget(e.target.value)}
+                                    placeholder="Masukkan Budget (Rp)"
+                                    className="pl-11 py-6 text-base border-transparent bg-[#F9FAEF] focus:bg-white focus:ring-2 focus:ring-[#7A9E7E] rounded-xl w-full text-[#2C3A2C] font-medium"
+                                    value={data.budget}
+                                    onChange={(e) =>
+                                        setData("budget", e.target.value)
+                                    }
+                                    disabled={processing}
                                 />
                             </div>
                             <Button
                                 type="submit"
-                                disabled={isLoading || !budget}
-                                className="py-5 px-6 bg-[#4A624E] hover:bg-[#3B4F3E] text-white rounded-xl font-semibold shadow-md transition-all"
+                                disabled={processing || !data.budget}
+                                className="h-auto py-4 px-6 bg-[#4A624E] hover:bg-[#3B4F3E] text-white rounded-xl font-semibold shadow-md transition-all active:scale-95"
                             >
-                                {isLoading ? (
+                                {processing ? (
                                     <Loader2
                                         className="animate-spin"
-                                        size={20}
+                                        size={24}
                                     />
                                 ) : (
-                                    <Search size={20} />
+                                    <Search size={24} />
                                 )}
                             </Button>
                         </form>
+
+                        {/* Error Messages */}
+                        {errors.budget && (
+                            <div className="text-red-500 text-sm mt-2 px-2 flex items-center gap-1 animate-in slide-in-from-top-1">
+                                <Info size={14} /> {errors.budget}
+                            </div>
+                        )}
+                        {errors.gemini && (
+                            <div className="text-red-500 text-sm mt-2 px-2 flex items-center gap-1 animate-in slide-in-from-top-1">
+                                <Info size={14} /> {errors.gemini}
+                            </div>
+                        )}
                     </div>
 
-                    {/* Content Area */}
+                    {/* --- CONTENT AREA --- */}
                     <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
-                        {isLoading && (
+                        {/* STATE: LOADING */}
+                        {processing && (
                             <div className="flex flex-col items-center justify-center py-16 text-center opacity-80">
-                                <ChefHat
-                                    size={48}
-                                    className="text-[#4A624E] animate-bounce mb-4"
-                                />
-                                <p className="text-[#5C6F5C] font-medium">
-                                    Sedang memilihkan menu terbaik...
+                                <div className="relative">
+                                    <div className="absolute inset-0 bg-[#4A624E] blur-xl opacity-20 animate-pulse rounded-full"></div>
+                                    <ChefHat
+                                        size={64}
+                                        className="text-[#4A624E] animate-bounce relative z-10"
+                                    />
+                                </div>
+                                <p className="text-[#5C6F5C] font-medium mt-6 text-lg">
+                                    Sedang menganalisis nutrisi & mencari warung
+                                    terdekat...
                                 </p>
                             </div>
                         )}
 
-                        {!isLoading && !recommendations && (
-                            <div className="text-center opacity-40 py-10">
+                        {/* STATE: EMPTY (BELUM CARI) */}
+                        {!processing && !rekomendasi && (
+                            <div className="text-center opacity-40 py-10 border-2 border-dashed border-[#D5E1C3] rounded-3xl mx-auto max-w-2xl bg-[#F9FAEF]/50">
                                 <Utensils
                                     size={64}
-                                    className="mx-auto mb-3 text-[#D5E1C3]"
+                                    className="mx-auto mb-4 text-[#D5E1C3]"
                                 />
-                                <p className="text-[#5C6F5C] text-sm">
-                                    Masukkan budget untuk memulai pencarian.
+                                <p className="text-[#5C6F5C] font-medium">
+                                    Siap mencari makanan? Masukkan budget di
+                                    atas.
                                 </p>
                             </div>
                         )}
 
-                        {/* HASIL REKOMENDASI */}
-                        {!isLoading && recommendations && (
-                            <div>
-                                <div className="flex items-center justify-between mb-6 px-1">
-                                    <h2 className="text-xl font-bold text-[#2C3A2C]">
-                                        Hasil Pencarian
-                                    </h2>
-                                    <span className="text-[#5C6F5C] text-sm bg-white px-3 py-1 rounded-full border border-[#D5E1C3] font-medium">
-                                        Budget: {formatRupiah(budget)}
-                                    </span>
+                        {/* STATE: RESULT */}
+                        {!processing && rekomendasi && (
+                            <div id="hasil-pencarian">
+                                {/* Summary Header */}
+                                <div className="bg-[#E9EFDB] border border-[#D5E1C3] rounded-2xl p-5 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
+                                    <div>
+                                        <h2 className="text-xl font-bold text-[#2C3A2C] flex items-center gap-2">
+                                            <Utensils size={20} /> Hasil
+                                            Rekomendasi
+                                        </h2>
+                                        {sisaKebutuhan && (
+                                            <p className="text-sm text-[#5C6F5C] mt-1">
+                                                Target: Penuhi{" "}
+                                                <b>
+                                                    {sisaKebutuhan.protein}g
+                                                    Protein
+                                                </b>{" "}
+                                                &{" "}
+                                                <b>
+                                                    {sisaKebutuhan.kalori} Kkal
+                                                </b>{" "}
+                                                lagi.
+                                            </p>
+                                        )}
+                                    </div>
+                                    <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-[#D5E1C3] shadow-sm">
+                                        <Wallet
+                                            size={16}
+                                            className="text-[#4A624E]"
+                                        />
+                                        <span className="text-[#5C6F5C] text-sm font-semibold">
+                                            Max: {formatRupiah(data.budget)}
+                                        </span>
+                                    </div>
                                 </div>
 
-                                {/* Grid 2 Kolom (Card Lebar) */}
+                                {/* Grid Cards */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {recommendations.map((item) => (
+                                    {rekomendasi.map((item, index) => (
                                         <div
-                                            key={item.id}
-                                            // Tambahkan h-full agar card sama tinggi jika deskripsi panjang
-                                            className="group bg-white rounded-2xl border border-[#D5E1C3] overflow-hidden hover:shadow-xl hover:shadow-[#4A624E]/10 transition-all duration-300 flex flex-col h-full"
+                                            key={index}
+                                            className="group bg-white rounded-2xl border border-[#D5E1C3] overflow-hidden hover:shadow-xl hover:shadow-[#4A624E]/10 transition-all duration-300 flex flex-col h-full relative"
                                         >
-                                            {/* FIXED HEIGHT IMAGE: 
-                                                h-48 (12rem/192px) w-full relative 
-                                            */}
-                                            <div className="h-48 w-full relative bg-[#E9EFDB] overflow-hidden shrink-0">
-                                                <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm font-bold text-[#4A624E] shadow-sm">
-                                                    {formatRupiah(item.harga)}
+                                            {/* Label Harga Melayang */}
+                                            <div className="absolute top-4 right-4 z-10">
+                                                <span className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm font-bold text-[#4A624E] shadow-sm border border-[#D5E1C3]">
+                                                    {formatRupiah(
+                                                        item.estimasi_harga
+                                                    )}
+                                                </span>
+                                            </div>
+
+                                            {/* Header Card */}
+                                            <div className="p-6 pb-4 bg-gradient-to-b from-[#F9FAEF] to-white">
+                                                <h3 className="text-xl font-bold text-[#2C3A2C] leading-snug pr-20 mb-2 group-hover:text-[#4A624E] transition-colors">
+                                                    {item.nama_menu}
+                                                </h3>
+                                                <p className="text-[#5C6F5C] text-sm italic leading-relaxed border-l-2 border-[#D5E1C3] pl-3">
+                                                    "{item.alasan_rekomendasi}"
+                                                </p>
+                                            </div>
+
+                                            {/* Body: Nutrisi Lengkap (7 Indikator) */}
+                                            <div className="px-6 py-2 flex-1">
+                                                {/* Baris 1: Macro Utama (Kalori & Protein) */}
+                                                <div className="flex gap-3 mb-4">
+                                                    <div className="flex-1 flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-2.5 rounded-xl text-sm font-bold border border-orange-100 shadow-sm">
+                                                        <Flame
+                                                            size={18}
+                                                            className="fill-orange-700/20"
+                                                        />
+                                                        {
+                                                            item.kandungan_gizi
+                                                                .kalori
+                                                        }{" "}
+                                                        Kcal
+                                                    </div>
+                                                    <div className="flex-1 flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-2.5 rounded-xl text-sm font-bold border border-blue-100 shadow-sm">
+                                                        <Beef
+                                                            size={18}
+                                                            className="fill-blue-700/20"
+                                                        />
+                                                        {
+                                                            item.kandungan_gizi
+                                                                .protein
+                                                        }
+                                                        g Prot
+                                                    </div>
+                                                </div>
+
+                                                {/* Baris 2: Grid Micro Nutrients */}
+                                                <div className="grid grid-cols-3 gap-2 mb-4">
+                                                    {/* Karbo */}
+                                                    <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-yellow-50 border border-yellow-100 text-yellow-800">
+                                                        <Wheat
+                                                            size={14}
+                                                            className="mb-1 opacity-70"
+                                                        />
+                                                        <span className="text-xs font-semibold">
+                                                            {
+                                                                item
+                                                                    .kandungan_gizi
+                                                                    .karbohidrat
+                                                            }
+                                                            g
+                                                        </span>
+                                                        <span className="text-[10px] opacity-60">
+                                                            Karbo
+                                                        </span>
+                                                    </div>
+                                                    {/* Lemak */}
+                                                    <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-rose-50 border border-rose-100 text-rose-800">
+                                                        <Droplet
+                                                            size={14}
+                                                            className="mb-1 opacity-70"
+                                                        />
+                                                        <span className="text-xs font-semibold">
+                                                            {
+                                                                item
+                                                                    .kandungan_gizi
+                                                                    .lemak
+                                                            }
+                                                            g
+                                                        </span>
+                                                        <span className="text-[10px] opacity-60">
+                                                            Lemak
+                                                        </span>
+                                                    </div>
+                                                    {/* Serat */}
+                                                    <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-green-50 border border-green-100 text-green-800">
+                                                        <Leaf
+                                                            size={14}
+                                                            className="mb-1 opacity-70"
+                                                        />
+                                                        <span className="text-xs font-semibold">
+                                                            {
+                                                                item
+                                                                    .kandungan_gizi
+                                                                    .serat
+                                                            }
+                                                            g
+                                                        </span>
+                                                        <span className="text-[10px] opacity-60">
+                                                            Serat
+                                                        </span>
+                                                    </div>
+                                                    {/* Gula */}
+                                                    <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-pink-50 border border-pink-100 text-pink-800">
+                                                        <Candy
+                                                            size={14}
+                                                            className="mb-1 opacity-70"
+                                                        />
+                                                        <span className="text-xs font-semibold">
+                                                            {
+                                                                item
+                                                                    .kandungan_gizi
+                                                                    .gula_tambahan
+                                                            }
+                                                            g
+                                                        </span>
+                                                        <span className="text-[10px] opacity-60">
+                                                            Gula
+                                                        </span>
+                                                    </div>
+                                                    {/* Natrium */}
+                                                    <div className="col-span-2 flex items-center justify-center gap-2 p-2 rounded-lg bg-gray-50 border border-gray-200 text-gray-600">
+                                                        <Waves
+                                                            size={14}
+                                                            className="opacity-70"
+                                                        />
+                                                        <div className="flex flex-col leading-none">
+                                                            <span className="text-xs font-semibold">
+                                                                {
+                                                                    item
+                                                                        .kandungan_gizi
+                                                                        .natrium
+                                                                }
+                                                                mg
+                                                            </span>
+                                                            <span className="text-[10px] opacity-60">
+                                                                Natrium (Garam)
+                                                            </span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            {/* Content Section */}
-                                            <div className="p-6 flex-1 flex flex-col justify-between text-left">
-                                                <div>
-                                                    <h3 className="text-xl font-bold text-[#2C3A2C] mb-2 leading-snug group-hover:text-[#4A624E] transition-colors">
-                                                        {item.nama}
-                                                    </h3>
-
-                                                    <p className="text-[#5C6F5C] text-sm mb-4 leading-relaxed line-clamp-2">
-                                                        {item.deskripsi}
-                                                    </p>
-                                                </div>
-
-                                                <div className="flex items-center justify-between mt-2 pt-4 border-t border-[#F2F5E8]">
-                                                    {/* Nutrisi */}
-                                                    <div className="flex gap-3">
-                                                        <div className="flex items-center gap-1.5 bg-orange-50 text-orange-700 px-2.5 py-1.5 rounded-lg text-xs font-bold border border-orange-100">
-                                                            <Flame size={14} />
-                                                            {item.kalori} Kcal
-                                                        </div>
-                                                        <div className="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-2.5 py-1.5 rounded-lg text-xs font-bold border border-blue-100">
-                                                            <Beef size={14} />
-                                                            {item.protein}g Pro
-                                                        </div>
-                                                    </div>
-
-                                                 
-                                                </div>
+                                            {/* Footer: Maps Button */}
+                                            <div className="p-4 pt-0 mt-auto">
+                                                <a
+                                                    href={item.maps_url}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="flex items-center justify-center gap-2 w-full py-3.5 bg-[#E9EFDB] hover:bg-[#D5E1C3] text-[#4A624E] rounded-xl font-bold transition-all text-sm hover:shadow-md border border-[#D5E1C3]"
+                                                >
+                                                    <MapPin size={18} />
+                                                    Cari Lokasi Terdekat
+                                                </a>
                                             </div>
                                         </div>
                                     ))}
+                                </div>
+
+                                <div className="mt-8 text-center">
+                                    <p className="text-xs text-[#5C6F5C]/60">
+                                        *Data nutrisi adalah estimasi AI
+                                        berdasarkan resep umum di Indonesia.
+                                    </p>
                                 </div>
                             </div>
                         )}
