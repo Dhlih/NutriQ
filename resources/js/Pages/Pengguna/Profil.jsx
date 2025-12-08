@@ -21,7 +21,7 @@ import useNotify from "@/Components/ToastNotification"; // Asumsi Anda punya ini
 
 export default function Profil() {
     // Mengambil data pengguna dari props (jika ada data awal)
-    const { user } = usePage().props;
+    const { user, flash } = usePage().props;
     console.log(user);
 
     const { notifySuccess, notifyError } = useNotify();
