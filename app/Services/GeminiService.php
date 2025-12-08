@@ -286,57 +286,61 @@ class GeminiService
     {
         $sisaKalori = max(0, $kebutuhan->kalori - ($sudahDimakan->kalori ?? 0));
         $sisaProtein = max(0, $kebutuhan->protein - ($sudahDimakan->protein ?? 0));
-        $sisaKarbo = max(0, $kebutuhan->karbohidrat - ($sudahDimakan->karbohidrat ?? 0));
         $sisaLemak = max(0, $kebutuhan->lemak - ($sudahDimakan->lemak ?? 0));
+        $sisaKarbo = max(0, $kebutuhan->karbohidrat - ($sudahDimakan->karbohidrat ?? 0));
         $sisaSerat = max(0, $kebutuhan->serat - ($sudahDimakan->serat ?? 0));
         $sisaNatrium = max(0, $kebutuhan->natrium - ($sudahDimakan->natrium ?? 0));
         $sisaGula = max(0, $kebutuhan->gula_tambahan - ($sudahDimakan->gula_tambahan ?? 0));
 
         $sisaKalori = number_format($sisaKalori, 0, '', '');
         $sisaProtein = number_format($sisaProtein, 0, '', '');
+        $sisaLemak = number_format($sisaLemak, 0, '', '');
+        $sisaKarbo = number_format($sisaKarbo, 0, '', '');
+        $sisaSerat = number_format($sisaSerat, 0, '', '');
+        $sisaNatrium = number_format($sisaNatrium, 0, '', '');
+        $sisaGula = number_format($sisaGula, 0, '', '');
         
         $prompt = "
             Bertindaklah sebagai Ahli Gizi dan Pencari Kuliner Lokal Indonesia.
             
             TUGAS:
-            Berikan 3 opsi rekomendasi MENU MAKANAN (Meal) yang bisa dibeli di warung/restoran/pedagang kaki lima.
+            Berikan 4 opsi rekomendasi MENU MAKANAN (Meal) yang bisa dibeli di warung/restoran/pedagang kaki lima.
             
             CONSTRAINT (BATASAN MUTLAK):
             1. BUDGET: Maksimal Rp {$budget} per porsi.
-            2. JENIS: HANYA MAKANAN PADAT (Lauk/Nasi/Sayur). DILARANG KERAS merekomendasikan MINUMAN (Jus, Susu, Boba, Kopi, dll).
-            3. KONTEKS: Makanan harus umum ditemukan di Indonesia.
+            2. JENIS: HANYA MAKANAN PADAT (Lauk/Nasi/Sayur).
             
-            KONDISI USER SAAT INI (KEKURANGAN NUTRISI):
-            User masih membutuhkan asupan berikut untuk mencapai target harian:
-            - Kalori: butuh {$sisaKalori} kkal
-            - Protein: butuh {$sisaProtein} gram
-            - Karbohidrat: butuh {$sisaKarbo} gram
-            - Lemak: butuh {$sisaLemak} gram
-            - Serat: butuh {$sisaSerat} gram
-            - Natrium: butuh {$sisaNatrium} mg
-            - Gula Tambahan: butuh {$sisaGula} gram
+            KONDISI USER (KEKURANGAN NUTRISI SAAT INI):
+            User membutuhkan asupan berikut untuk mencapai target harian:
+            - Kalori: {$sisaKalori} kkal
+            - Protein: {$sisaProtein} gram
+            - Lemak: {$sisaLemak} gram
+            - Karbohidrat: {$sisaKarbo} gram
+            - Serat: {$sisaSerat} gram
+            - Natrium: {$sisaNatrium} mg
+            - Gula Tambahan: {$sisaGula} gram
 
-            INSTRUKSI PEMILIHAN MENU:
-            - Jika user butuh banyak protein, sarankan makanan tinggi protein (misal: Dada Ayam, Ikan, Telur).
-            - Jika sisa kalori sedikit tapi budget besar, cari makanan rendah kalori tapi mahal/berkualitas.
-            - Jika budget rendah, cari makanan rakyat yang bergizi (misal: Pecel, Warteg, Gado-gado).
+            INSTRUKSI:
+            - Jika kekurangan Serat tinggi, sarankan menu sayuran (Gado-gado, Pecel, Capcay).
+            - Jika kekurangan Protein tinggi, sarankan lauk hewani/nabati (Ayam, Telur, Tempe).
+            - Usahakan rekomendasi menyeimbangkan kekurangan nutrisi di atas.
             
-            FORMAT OUTPUT JSON (Wajib Valid JSON Array):
+            FORMAT OUTPUT: Wajib return HANYA JSON valid sesuai struktur berikut (tanpa markdown ```json):
             [
                 {
-                    \"nama_menu\": \"Nama Makanan Spesifik (misal: Nasi Padang Ayam Pop)\",
-                    \"estimasi_harga\": (number, dalam Rupiah),
-                    \"alasan_rekomendasi\": \"Penjelasan singkat kenapa ini cocok dengan sisa nutrisi & budget\",
+                    \"nama_menu\": \"Nama Makanan Lengkap\",
+                    \"estimasi_harga\": 15000,
+                    \"alasan_rekomendasi\": \"Jelaskan kecocokan dengan sisa nutrisi (misal: Tinggi serat untuk menutup kekurangan serat)\",
                     \"kandungan_gizi\": {
-                        \"kalori\": (number),
-                        \"protein\": (number),
-                        \"karbohidrat\": (number),
-                        \"lemak\": (number)
-                        \"serat\": (number),
-                        \"natrium\": (number),
-                        \"gula_tambahan\": (number)
+                        \"kalori\": (int),
+                        \"protein\": (int),
+                        \"lemak\": (int),
+                        \"karbohidrat\": (int),
+                        \"serat\": (int),
+                        \"natrium\": (int),
+                        \"gula_tambahan\": (int)
                     },
-                    \"keyword_pencarian\": \"Kata kunci untuk Google Maps (misal: Nasi Padang Ayam Pop Terdekat)\"
+                    \"keyword_pencarian\": \"Keyword spesifik untuk Maps\"
                 }
             ]
         ";
@@ -345,40 +349,51 @@ class GeminiService
             "contents" => [
                 ["parts" => [["text" => $prompt]]]
             ],
+            "safetySettings" => [
+                ["category" => "HARM_CATEGORY_HARASSMENT", "threshold" => "BLOCK_NONE"],
+                ["category" => "HARM_CATEGORY_HATE_SPEECH", "threshold" => "BLOCK_NONE"],
+                ["category" => "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold" => "BLOCK_NONE"],
+                ["category" => "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold" => "BLOCK_NONE"],
+            ],
             "generationConfig" => [
                 "temperature" => 0.4,
                 "topK" => 32,
                 "topP" => 1,
-                "maxOutputTokens" => 2000,
+                "maxOutputTokens" => 8192, 
             ]
         ];
 
         $response = $this->requestWithFallback($body);
 
-        if (!$response) return ['error' => 'api_gagal'];
+        if (!$response) return ['error' => 'api_gagal_koneksi'];
 
         $data = $response->json();
+        
+        if (isset($data['promptFeedback']['blockReason'])) {
+            return ['error' => 'blokir_safety: ' . $data['promptFeedback']['blockReason']];
+        }
+
         $text = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
 
-        if (!$text) return ['error' => 'respon_kosong'];
+        if (!$text) return ['error' => 'respon_kosong_dari_ai'];
 
-        // Bersihkan markdown json
         $text = preg_replace('/^```json\s*|\s*```$/', '', $text);
+        preg_match('/\[(?:[^\[\]]|(?R))*\]/s', $text, $match);
         
-        // Parse JSON
-        preg_match('/\[(?:[^\[\]]|(?R))*\]/', $text, $match);
-        
-        if (!isset($match[0])) return ['error' => 'json_tidak_valid'];
+        if (!isset($match[0])) return ['error' => 'format_json_rusak'];
         
         $rekomendasi = json_decode($match[0], true);
 
         if (!$rekomendasi) return ['error' => 'gagal_parse_json'];
 
         foreach ($rekomendasi as &$item) {  
-            $query = urlencode($item['keyword_pencarian']);
-            $item['maps_url'] = "https://www.google.com/maps/search/?api=1&query={$query}";
+            $keyword = $item['keyword_pencarian'] . " terdekat";
+            $query = urlencode($keyword);
+            
+            $item['maps_url'] = "https://www.google.com/maps/search/{$query}";
         }
 
         return $rekomendasi;
     }
+    
 }
