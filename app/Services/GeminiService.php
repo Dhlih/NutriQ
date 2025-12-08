@@ -140,7 +140,6 @@ class GeminiService
         return $json;
     }
 
-
     public function generateMakanan($imageFile)
     {
         $imageData = base64_encode(file_get_contents($imageFile->getRealPath()));
@@ -180,6 +179,7 @@ class GeminiService
             LANGKAH 4: FORMAT OUTPUT
             Wajib return HANYA JSON valid sesuai struktur berikut (tanpa markdown ```json):
 
+            FORMAT JSON YANG WAJIB DIIKUTI:
             {
                 \"nama\": \"Nama Makanan Utama\",
                 \"tanggal\": \"" . date('Y-m-d') . "\",
@@ -252,15 +252,19 @@ class GeminiService
             return ['error' => 'respon_kosong'];
         }
 
+        // Bersihkan Markdown jikalau AI tetap bandel
         $text = preg_replace('/^```json\s*|\s*```$/', '', $text);
-
-        preg_match('/\{(?:[^{}]|(?R))*\}/', $text, $match);
+        
+        // Parse JSON
+        // Gunakan regex flag 's' (dot matches newline) untuk keamanan ekstra
+        preg_match('/\{(?:[^{}]|(?R))*\}/s', $text, $match);
 
         if (!isset($match[0])) {
-            return ['error' => 'json_tidak_valid'];
+            // Fallback: coba parse langsung text-nya siapa tau sudah bersih
+            $json = json_decode($text, true);
+        } else {
+            $json = json_decode($match[0], true);
         }
-
-        $json = json_decode($match[0], true);
 
         if (!$json) {
             return ['error' => 'json_tidak_bisa_parse'];
@@ -270,6 +274,7 @@ class GeminiService
             return ['error' => 'bukan_makanan'];
         }
 
+        // Validasi struktur kunci penting saja
         if (!isset($json['nama']) || !isset($json['detail']) || !isset($json['total'])) {
             return ['error' => 'struktur_tidak_lengkap'];
         }

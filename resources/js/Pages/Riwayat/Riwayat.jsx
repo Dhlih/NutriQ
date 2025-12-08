@@ -5,7 +5,6 @@ import AppLayout from "@/Components/AppLayout";
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -14,95 +13,91 @@ import {
 
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
-import { Search, CalendarDays, XCircle } from "lucide-react";
+import { Search, XCircle, ChevronLeft, ChevronRight, Eye } from "lucide-react";
+
+// Import komponen DatePickerDropdown
+import { DatePickerDropdown } from "@/Components/ui/date-picker-dropdown";
 
 export default function Riwayat({ makanans, filters }) {
     const [search, setSearch] = React.useState(filters?.search || "");
-    const [tanggal, setTanggal] = React.useState(filters?.tanggal || "");
+    // State tanggal sekarang menyimpan objek Date
+    const [dateValue, setDateValue] = React.useState(
+        filters?.tanggal ? new Date(filters.tanggal) : null
+    );
 
-    const inputTanggalRef = React.useRef(null);
+    // Fungsi untuk mengubah tanggal dan melakukan filter
+    const handleDateChange = (date) => {
+        const dateString = date ? date.toISOString().split("T")[0] : "";
+        setDateValue(date);
+
+        router.get(
+            "/riwayat",
+            { search, tanggal: dateString },
+            { preserveState: true, replace: true }
+        );
+    };
 
     // SEARCH realtime
     React.useEffect(() => {
         const timeout = setTimeout(() => {
+            // Konversi dateValue menjadi string YYYY-MM-DD
+            const tanggalString = dateValue
+                ? dateValue.toISOString().split("T")[0]
+                : "";
             router.get(
                 "/riwayat",
-                { search, tanggal },
+                { search, tanggal: tanggalString },
                 { preserveState: true, replace: true }
             );
         }, 400);
-
         return () => clearTimeout(timeout);
     }, [search]);
 
-    // FILTER TANGGAL realtime
-    React.useEffect(() => {
-        if (!tanggal) return;
-
-        router.get(
-            "/riwayat",
-            { search, tanggal },
-            { preserveState: true, replace: true }
-        );
-    }, [tanggal]);
-
-    const resetTanggal = () => {
-        setTanggal("");
-        router.get(
-            "/riwayat",
-            { search, tanggal: "" },
-            { preserveState: true, replace: true }
-        );
-    };
+    // Hapus FILTER TANGGAL realtime lama, karena DatePickerDropdown akan memanggil handleDateChange
 
     return (
         <AppLayout>
             <Head title="Riwayat Makanan" />
 
-            <div className="max-w-6xl w-full">
-                <h1 className="text-4xl font-bold mb-6">Riwayat</h1>
+            <div className="max-w-7xl mx-auto w-full">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <h1 className="text-3xl font-bold text-[#2C3A2C]">
+                            Riwayat Makan
+                        </h1>
+                        <p className="text-[#5C6F5C] mt-1">
+                            Daftar semua makanan yang telah kamu scan.
+                        </p>
+                    </div>
+                </div>
 
-                {/* Search & Date Filter */}
-                <div className="flex items-center justify-between mb-6">
+                {/* Search & Filter Toolbar */}
+                <div className="bg-white p-2 rounded-xl border border-[#D5E1C3] shadow-sm mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
                     {/* SEARCH */}
-                    <div className="relative w-1/2">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
+                    <div className="relative w-full md:w-1/3">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5C6F5C]" />
                         <Input
-                            placeholder="Ketikkan makanan..."
-                            className="pl-10 border-green-400 bg-white"
+                            placeholder="Cari nama makanan..."
+                            className="pl-10 border-[#D5E1C3] bg-[#F9FAEF] focus:ring-[#7A9E7E] focus:border-[#7A9E7E] placeholder:text-[#8D9F8D] text-[#2C3A2C]"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
                     </div>
 
-                    {/* DATE FILTER (container clickable + reset terpisah) */}
-                    <div className="flex items-center gap-2">
-                        {/* Date Picker Box */}
-                        <div
-                            className="relative flex items-center gap-2 border border-green-400 bg-white px-4 py-2 rounded-lg cursor-pointer hover:bg-green-100 transition"
-                            onClick={() => inputTanggalRef.current.showPicker()}
-                        >
-                            <CalendarDays className="h-5 w-5 text-black" />
-
-                            <span className="text-black">
-                                {tanggal ? tanggal : "Filter Tanggal"}
-                            </span>
-
-                            {/* Hidden input date */}
-                            <input
-                                ref={inputTanggalRef}
-                                type="date"
-                                value={tanggal}
-                                onChange={(e) => setTanggal(e.target.value)}
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    {/* DATE FILTER MENGGUNAKAN DatePickerDropdown */}
+                    <div className="flex items-center gap-2 w-full md:w-auto">
+                        <div className="w-full md:w-[250px]">
+                            <DatePickerDropdown
+                                value={dateValue}
+                                onChange={handleDateChange} // Gunakan handler baru
                             />
                         </div>
 
-                        {/* RESET BUTTON — terpisah */}
-                        {tanggal && (
+                        {dateValue && (
                             <button
-                                onClick={resetTanggal}
-                                className="p-2 rounded-lg border border-red-400 text-red-500 hover:bg-red-100 transition"
+                                onClick={() => handleDateChange(null)} // Panggil handleDateChange(null) untuk menghapus filter
+                                className="p-2 rounded-lg border border-red-200 text-red-500 hover:bg-red-50 transition"
+                                title="Hapus Filter Tanggal"
                             >
                                 <XCircle className="h-5 w-5" />
                             </button>
@@ -110,32 +105,30 @@ export default function Riwayat({ makanans, filters }) {
                     </div>
                 </div>
 
-                {/* TABLE */}
-                <div className="rounded-xl border border-green-300 shadow-md overflow-hidden bg-white">
+                {/* TABLE CARD */}
+                <div className="bg-white rounded-xl border border-[#D5E1C3] shadow-sm overflow-hidden">
                     <Table>
-                        <TableHeader className="bg-[#A6BF9D]">
-                            <TableRow>
-                                <TableHead className="font-semibold text-black">
+                        <TableHeader className="bg-[#E9EFDB]">
+                            <TableRow className="hover:bg-[#E9EFDB]">
+                                <TableHead className="w-[100px] font-bold text-[#2C3A2C]">
                                     Foto
                                 </TableHead>
-                                <TableHead className="font-semibold text-black">
+                                <TableHead className="font-bold text-[#2C3A2C]">
                                     Tanggal
                                 </TableHead>
-                                <TableHead className="font-semibold text-black">
+                                <TableHead className="font-bold text-[#2C3A2C]">
                                     Waktu
                                 </TableHead>
-                                <TableHead className="font-semibold text-black">
+                                <TableHead className="font-bold text-[#2C3A2C]">
                                     Menu
                                 </TableHead>
-                                <TableHead className="font-semibold text-black">
+                                <TableHead className="font-bold text-[#2C3A2C]">
                                     Kalori
                                 </TableHead>
-                                <TableHead className="font-semibold text-black">
+                                <TableHead className="font-bold text-[#2C3A2C]">
                                     Protein
                                 </TableHead>
-                                <TableHead className="font-semibold text-black">
-                                    Aksi
-                                </TableHead>
+                                <TableHead className="text-left font-bold text-[#2C3A2C]"></TableHead>
                             </TableRow>
                         </TableHeader>
 
@@ -144,48 +137,71 @@ export default function Riwayat({ makanans, filters }) {
                                 <TableRow>
                                     <TableCell
                                         colSpan={7}
-                                        className="text-center py-10 text-gray-500"
+                                        className="text-center py-16"
                                     >
-                                        Belum ada riwayat makanan.
+                                        <div className="flex flex-col items-center justify-center text-[#5C6F5C]">
+                                            <div className="bg-[#F2F5E8] p-4 rounded-full mb-3">
+                                                <Search
+                                                    size={30}
+                                                    className="opacity-50"
+                                                />
+                                            </div>
+                                            <p className="font-medium">
+                                                Tidak ada data ditemukan
+                                            </p>
+                                            <p className="text-sm opacity-70">
+                                                Coba ubah filter atau scan
+                                                makanan baru.
+                                            </p>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ) : (
                                 makanans.data.map((item) => (
                                     <TableRow
                                         key={item.id}
-                                        className="hover:bg-green-50 transition-all"
+                                        className="hover:bg-[#F9FAEF] transition-colors border-b border-[#F2F5E8]"
                                     >
                                         <TableCell>
-                                            <img
-                                                src={item.foto}
-                                                className="h-14 w-14 rounded-full object-cover shadow"
-                                            />
+                                            <div className="h-16 w-16 rounded-lg overflow-hidden border border-[#D5E1C3]">
+                                                <img
+                                                    src={item.foto}
+                                                    alt={item.nama}
+                                                    className="h-full w-full object-cover"
+                                                />
+                                            </div>
                                         </TableCell>
-
-                                        <TableCell className="text-gray-800">
+                                        <TableCell className="text-[#2C3A2C] font-medium">
                                             {item.tanggal}
                                         </TableCell>
-
-                                        <TableCell className="text-gray-800">
+                                        <TableCell className="text-[#5C6F5C]">
                                             {item.jam}
                                         </TableCell>
-
-                                        <TableCell className="font-medium">
+                                        <TableCell className="text-[#2C3A2C] font-semibold">
                                             {item.nama}
                                         </TableCell>
-
                                         <TableCell>
-                                            {item.total_kalori} kcal
+                                            <span className="bg-orange-50 text-orange-700 px-2 py-1 rounded-md text-xs font-medium border border-orange-100">
+                                                {item.total_kalori} kcal
+                                            </span>
                                         </TableCell>
                                         <TableCell>
-                                            {item.total_protein} g
+                                            <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-xs font-medium border border-blue-100">
+                                                {item.total_protein} g
+                                            </span>
                                         </TableCell>
-
-                                        <TableCell>
+                                        <TableCell className="text-right">
                                             <Link
                                                 href={`/riwayat/${item.slug}`}
                                             >
-                                                <Button className="bg-[#6E8F5C] text-white hover:bg-[#5d7d4d]">
+                                                <Button
+                                                    size="sm"
+                                                    className="bg-[#7A9E7E] hover:bg-[#4A624E] text-white shadow-sm transition-all "
+                                                >
+                                                    <Eye
+                                                        size={16}
+                                                        className="mr-1"
+                                                    />
                                                     Detail
                                                 </Button>
                                             </Link>
@@ -194,48 +210,55 @@ export default function Riwayat({ makanans, filters }) {
                                 ))
                             )}
                         </TableBody>
-
-                        <TableCaption className="text-gray-600 mt-4">
-                            Daftar makanan yang pernah kamu scan.
-                        </TableCaption>
                     </Table>
                 </div>
 
-                {/* PAGINATION — pojok kanan */}
-                <div className="flex justify-end items-center gap-2 mt-6">
-                    {makanans.links.map((link, index) => {
-                        const isActive = link.active;
-                        const isDisabled = !link.url;
+                {/* PAGINATION */}
+                {makanans.data.length > 0 && (
+                    <div className="flex justify-end items-center gap-2 mt-6">
+                        {makanans.links.map((link, index) => {
+                            const isDisabled = !link.url;
+                            const isActive = link.active;
 
-                        const label = link.label.includes("Previous")
-                            ? "<"
-                            : link.label.includes("Next")
-                            ? ">"
-                            : link.label;
+                            // Clean labels
+                            let label = link.label;
+                            if (label.includes("Previous"))
+                                label = <ChevronLeft size={16} />;
+                            else if (label.includes("Next"))
+                                label = <ChevronRight size={16} />;
 
-                        return (
-                            <Link
-                                key={index}
-                                href={isDisabled ? "#" : link.url}
-                                className={`
-                                    flex items-center justify-center
-                                    w-10 h-10 rounded-lg text-sm transition-all
-                                    ${
-                                        isActive
-                                            ? "bg-green-600 text-white shadow"
-                                            : "bg-white border border-green-300 text-black hover:bg-green-100"
-                                    }
-                                    ${
-                                        isDisabled
-                                            ? "opacity-40 cursor-not-allowed"
-                                            : ""
-                                    }
-                                `}
-                                dangerouslySetInnerHTML={{ __html: label }}
-                            />
-                        );
-                    })}
-                </div>
+                            return (
+                                <Link
+                                    key={index}
+                                    href={isDisabled ? "#" : link.url}
+                                    className={`
+                                        flex items-center justify-center min-w-[2.5rem] h-10 px-3 rounded-lg text-sm font-medium transition-all
+                                        ${
+                                            isActive
+                                                ? "bg-[#4A624E] text-white shadow-md shadow-[#4A624E]/20"
+                                                : "bg-white border border-[#D5E1C3] text-[#5C6F5C] hover:bg-[#F2F5E8] hover:text-[#2C3A2C]"
+                                        }
+                                        ${
+                                            isDisabled
+                                                ? "opacity-40 cursor-not-allowed hover:bg-white"
+                                                : ""
+                                        }
+                                    `}
+                                >
+                                    {typeof label === "string" ? (
+                                        <span
+                                            dangerouslySetInnerHTML={{
+                                                __html: label,
+                                            }}
+                                        />
+                                    ) : (
+                                        label
+                                    )}
+                                </Link>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
         </AppLayout>
     );

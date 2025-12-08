@@ -1,26 +1,27 @@
-import React, { useState } from "react";
-import { router, useForm, usePage } from "@inertiajs/react";
+import React, { useEffect, useState } from "react";
+import { router, useForm } from "@inertiajs/react";
 import { Eye, EyeOff, User, Mail, Lock } from "lucide-react";
-import { Spinner } from "@/components/ui/spinner";
-import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Spinner } from "@/Components/ui/spinner";
+import Alert from "@/Components/Alert";
+import Title from "@/Components/Title";
+import { Label } from "@/Components/ui/label";
+import { Input } from "@/Components/ui/input";
 
 export default function Register() {
-    const [isNotFilled, setIsnotFilled] = useState(false);
-    const [hidePassword, setHidePassword] = useState(false);
+    const [isNotFilled, setIsNotFilled] = useState(false);
+    const [hidePassword, setHidePassword] = useState(true);
+
     const { data, setData, post, processing, errors } = useForm({
         name: "",
         email: "",
         password: "",
     });
-    const { flash } = usePage().props;
 
     const handleRegister = (e) => {
         e.preventDefault();
-        alert("mendaftarkan akun");
 
         if (!data.name || !data.email || !data.password) {
-            alert("isi semua field!");
+            setIsNotFilled(true);
             return;
         }
 
@@ -28,80 +29,106 @@ export default function Register() {
             alert("Password minimal 8 karakter!");
             return;
         }
+
         post("/register");
     };
 
-    // **Class yang Diperbarui untuk Input**
+    useEffect(() => {
+        if (isNotFilled) {
+            const timer = setTimeout(() => {
+                setIsNotFilled(false);
+            }, 1500);
+            return () => clearTimeout(timer);
+        }
+    }, [isNotFilled]);
+
+    // --- STYLE CLASSES (Konsisten dengan Login) ---
     const inputWrapperClass =
-        "relative flex items-center bg-white rounded-lg border border-gray-300 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/50 focus-within:ring-offset-0 transition-all duration-200";
-    const inputFieldClass =
-        "bg-transparent outline-none rounded-lg w-full py-2 pl-10 pr-4 text-gray-800 placeholder:text-gray-400 focus:ring-0 focus:border-0";
-    const iconClass = "w-5 h-5 ml-3 text-gray-400 absolute";
+        "relative flex items-center bg-white rounded-xl border border-[#D5E1C3] focus-within:border-[#7A9E7E] focus-within:ring-2 focus-within:ring-[#7A9E7E]/20 focus-within:ring-offset-0 transition-all duration-200";
+    const iconClass = "w-5 h-5 ml-3 text-[#5C6F5C] absolute";
 
     return (
-        <div className="h-screen flex flex-col justify-center items-center gap-[1.5rem]">
+        // Background Cream Terang
+        <div className="min-h-screen flex flex-col justify-center items-center gap-[1.5rem] bg-[#F7F9F0] text-[#2C3A2C] font-sans p-4">
             <div className="logo text-center">
-                <h1 className="font-bold text-4xl">NutriQ</h1>
-                <p className="text-lg">Mulai perjalanan sehat Anda!</p>
+                <Title
+                    text="NutriQ"
+                    className="text-[#2C3A2C] text-4xl font-bold tracking-tight"
+                />
+                <p className="text-lg text-[#5C6F5C] mt-2">
+                    Mulai perjalanan sehat Anda!
+                </p>
             </div>
-            {/* Mengubah bg-secondary menjadi bg-white/bg-card jika ada di theme Anda */}
-            <div className="card md:max-w-[330px] max-w-xs w-full p-[1.5rem] rounded-2xl bg-white shadow-xl">
+
+            <div className="card md:max-w-[380px] max-w-xs w-full p-8 rounded-2xl bg-white shadow-xl shadow-[#7A9E7E]/10 border border-[#D5E1C3]">
                 <form onSubmit={handleRegister} className="flex flex-col">
-                    <div className="flex flex-col gap-[0.5rem] ">
-                        <label htmlFor="" className="font-medium text-gray-700">
+                    {/* Input Nama */}
+                    <div className="flex flex-col gap-[0.5rem]">
+                        <Label className="font-semibold text-[#2C3A2C]">
                             Nama
-                        </label>
-                        {/* Wrapper Nama dengan gaya Shadcn */}
+                        </Label>
                         <div className={inputWrapperClass}>
                             <User className={iconClass} />
-                            <input
+                            <Input
                                 type="text"
+                                className="pl-[2.5rem] py-6 bg-transparent border-none focus-visible:ring-0 text-[#2C3A2C] placeholder:text-[#9CA3AF]"
+                                value={data.name}
                                 onChange={(e) =>
                                     setData("name", e.target.value)
                                 }
-                                className={inputFieldClass}
-                                placeholder="masukkan nama..."
+                                placeholder="Nama "
                             />
                         </div>
+                        {errors.name && (
+                            <span className="text-red-500 text-xs mt-1">
+                                {errors.name}
+                            </span>
+                        )}
                     </div>
 
-                    <div className="flex flex-col gap-[0.5rem] mt-[1rem]">
-                        <label htmlFor="" className="font-medium text-gray-700">
+                    {/* Input Email */}
+                    <div className="flex flex-col gap-[0.5rem] mt-5">
+                        <Label className="font-semibold text-[#2C3A2C]">
                             Email
-                        </label>
-                        {/* Wrapper Email dengan gaya Shadcn */}
+                        </Label>
                         <div className={inputWrapperClass}>
                             <Mail className={iconClass} />
-                            <input
-                                type="text"
+                            <Input
+                                type="email"
+                                className="pl-[2.5rem] py-6 bg-transparent border-none focus-visible:ring-0 text-[#2C3A2C] placeholder:text-[#9CA3AF]"
+                                value={data.email}
                                 onChange={(e) =>
                                     setData("email", e.target.value)
                                 }
-                                className={inputFieldClass}
                                 placeholder="example@gmail.com"
                             />
                         </div>
+                        {errors.email && (
+                            <span className="text-red-500 text-xs mt-1">
+                                {errors.email}
+                            </span>
+                        )}
                     </div>
 
-                    <div className="flex flex-col gap-[0.5rem] mt-[1rem]">
-                        <label htmlFor="" className="font-medium text-gray-700">
+                    {/* Input Password */}
+                    <div className="flex flex-col gap-[0.5rem] mt-5">
+                        <Label className="font-semibold text-[#2C3A2C]">
                             Password
-                        </label>
-                        {/* Wrapper Password dengan gaya Shadcn */}
+                        </Label>
                         <div className={inputWrapperClass}>
                             <Lock className={iconClass} />
-                            <input
+                            <Input
                                 type={hidePassword ? "password" : "text"}
+                                className="pl-[2.5rem] py-6 bg-transparent border-none focus-visible:ring-0 text-[#2C3A2C] placeholder:text-[#9CA3AF]"
+                                value={data.password}
                                 onChange={(e) =>
                                     setData("password", e.target.value)
                                 }
                                 placeholder="masukkan password..."
-                                className={`${inputFieldClass} pr-12`} // pr-12 untuk memberi ruang tombol mata
                             />
-                            {/* hide password button */}
                             <button
                                 onClick={() => setHidePassword(!hidePassword)}
-                                className="w-5 h-5 cursor-pointer opacity-60 absolute right-3 transition-opacity duration-200 hover:opacity-100" // right-3 agar sedikit menjauh dari border
+                                className="w-5 h-5 cursor-pointer text-[#5C6F5C] hover:text-[#2C3A2C] absolute right-3 transition-colors"
                                 type="button"
                             >
                                 {hidePassword ? (
@@ -111,36 +138,49 @@ export default function Register() {
                                 )}
                             </button>
                         </div>
+                        {errors.password && (
+                            <span className="text-red-500 text-xs mt-1">
+                                {errors.password}
+                            </span>
+                        )}
                     </div>
 
+                    {/* Submit Button */}
                     <button
                         type="submit"
-                        className={`mt-[2rem] fill-quartenary text-white p-[0.6rem] rounded-lg font-semibold hover:bg-quartenary/80 flex items-center justify-center transition-colors duration-200`}
+                        className={`mt-8 bg-[#7A9E7E] text-white py-3 rounded-xl font-bold hover:bg-[#5C6F5C] hover:shadow-lg hover:shadow-[#7A9E7E]/20 flex items-center justify-center transition-all duration-200 active:scale-95`}
                         disabled={processing}
                     >
                         {!processing ? (
                             "Register"
                         ) : (
-                            <Spinner className="w-7 h-7 " />
+                            <Spinner className="w-6 h-6 text-white" />
                         )}
                     </button>
                 </form>
 
-                <p className="text-center mt-[1rem]">
+                <p className="text-center mt-6 text-[#5C6F5C] text-sm">
                     Sudah punya akun?
                     <span
-                        className="text-quartenary font-semibold hover:underline cursor-pointer ml-[0.2rem]"
+                        className="text-[#7A9E7E] font-bold hover:underline cursor-pointer ml-1 hover:text-[#2C3A2C] transition-colors"
                         onClick={() => router.visit("/login")}
                     >
                         Login
                     </span>
                 </p>
             </div>
-            {/* {!isNotFilled && (
-                <Alert variant="destructive" className="max-w-xs w-full flex items-center justify-center fixed top-12 ">
-                    <AlertCircleIcon />
-                    <AlertTitle>Unable to process your payment.</AlertTitle>
-                </Alert>
+
+            {/* Global Alerts */}
+            {isNotFilled && (
+                <div className="fixed top-10 z-50">
+                    <Alert variant="warning" title="Harap isi semua field!" />
+                </div>
+            )}
+
+            {/* {errors.error && (
+                <div className="fixed top-24 z-50">
+                    <Alert variant="error" msg={errors.error} />
+                </div>
             )} */}
         </div>
     );
