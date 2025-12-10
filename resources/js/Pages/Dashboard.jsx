@@ -1,4 +1,8 @@
 import React from "react";
+// Import DatePickerDropdown sesuai permintaan
+import { DatePickerDropdown } from "@/Components/ui/date-picker-dropdown";
+// Import 'router' dari Inertia untuk menangani filter tanggal
+import { Head, usePage, router } from "@inertiajs/react";
 import AppLayout from "@/Components/AppLayout";
 import DashboardCard from "@/Components/DashboardCard";
 import {
@@ -11,12 +15,87 @@ import {
     Calendar,
     Sparkles,
     LayoutDashboard,
+    // TimePickerDropdown tidak diperlukan karena Anda hanya ingin tanggal
 } from "lucide-react";
-import { Head, usePage } from "@inertiajs/react";
 import EventsChart from "@/Components/EventsChart";
 
 export default function Dashboard() {
-    const { user, kebutuhan, makananHariIni } = usePage().props;
+    // Ambil prop baru
+    const {
+        user,
+        kebutuhan,
+        makananHariIni,
+        tanggal,
+        makananRentangTanggal,
+        chartDates,
+    } = usePage().props;
+
+    // State untuk tanggal hari ini (dipakai di header)
+    const [tanggalHeader, setTanggalHeader] = React.useState(new Date(tanggal));
+
+    // Fungsi untuk mengubah tanggal pada header 'Hari Ini'
+    const handleDateChange = (date) => {
+        if (!date) return; // Pastikan tanggal valid
+        setTanggalHeader(date);
+
+        // Format tanggal ke string YYYY-MM-DD
+        const formattedDate = date.toISOString().split("T")[0];
+
+        // Lakukan request Inertia baru dengan tanggal yang dipilih
+        router.get(
+            route("dashboard"),
+            { tanggal: formattedDate },
+            { preserveState: true } // Pertahankan state lokal (seperti scroll position)
+        );
+    };
+
+    const opsiFormat = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    };
+
+    const tanggalTerformat = tanggalHeader.toLocaleDateString(
+        "id-ID",
+        opsiFormat
+    );
+
+    // Definisi 7 Kebutuhan Harian untuk dipakai di Chart dan Card
+    const nutritionKeys = {
+        Kalori: {
+            icon: Flame,
+            color: "#7A9E7E",
+            label: "Kalori",
+            satuan: "Kkal",
+        },
+        Protein: {
+            icon: Beef,
+            color: "#7A9E7E",
+            label: "Protein",
+            satuan: "g",
+        },
+        Karbohidrat: {
+            icon: Wheat,
+            color: "#7A9E7E",
+            label: "Karbohidrat",
+            satuan: "g",
+        },
+        Lemak: { icon: Droplet, color: "#7A9E7E", label: "Lemak", satuan: "g" },
+        Natrium: {
+            icon: Sparkles,
+            color: "#A6C19D",
+            label: "Natrium",
+            satuan: "mg",
+        },
+        Serat: { icon: Leaf, color: "#A6C19D", label: "Serat", satuan: "g" },
+        Gula_tambahan: {
+            icon: Candy,
+            color: "#A6C19D",
+            label: "Gula Tambahan",
+            satuan: "g",
+        },
+    };
 
     const kbt = kebutuhan || {};
     const mkn = makananHariIni || {};
@@ -46,9 +125,19 @@ export default function Dashboard() {
                         </p>
                     </div>
 
-                    <div className="self-start md:self-center bg-white border border-[#D5E1C3] py-2 px-4 rounded-full flex items-center gap-2 text-sm font-medium text-[#5C6F5C] shadow-sm">
-                        <Calendar size={16} />
-                        <span>12 Desember 2025</span>
+                    {/* Tombol Date Picker untuk Filter 'Hari Ini' */}
+                    <div className="self-start md:self-center">
+                        <DatePickerDropdown
+                            selectedDate={tanggalHeader}
+                            onDateSelect={handleDateChange}
+                            align="end" // Dropdown muncul di kanan
+                        >
+                            {/* Konten yang akan menjadi tombol/trigger dropdown */}
+                            <div className="bg-white border border-[#D5E1C3] py-2 px-4 rounded-full flex items-center gap-2 text-sm font-medium text-[#5C6F5C] shadow-sm cursor-pointer">
+                                <Calendar size={16} />
+                                <span>{tanggalTerformat}</span>
+                            </div>
+                        </DatePickerDropdown>
                     </div>
                 </div>
 
@@ -59,33 +148,25 @@ export default function Dashboard() {
                         Makronutrisi
                     </h2>
 
-                    {/* Menggunakan Grid untuk Responsif yang Lebih Baik */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <DashboardCard
-                            icon={Flame}
-                            label="Kalori"
-                            makananHariIni={mkn.kalori}
-                            kebutuhan={kbt.kalori}
-                            satuan="Kkal"
-                        />
-                        <DashboardCard
-                            icon={Beef}
-                            label="Protein"
-                            makananHariIni={mkn.protein}
-                            kebutuhan={kbt.protein}
-                        />
-                        <DashboardCard
-                            icon={Wheat}
-                            label="Karbohidrat"
-                            makananHariIni={mkn.karbohidrat}
-                            kebutuhan={kbt.karbohidrat}
-                        />
-                        <DashboardCard
-                            icon={Droplet}
-                            label="Lemak"
-                            makananHariIni={mkn.lemak}
-                            kebutuhan={kbt.lemak}
-                        />
+                        {Object.entries({
+                            Kalori: mkn.kalori,
+                            Protein: mkn.protein,
+                            Karbohidrat: mkn.karbohidrat,
+                            Lemak: mkn.lemak,
+                        }).map(([key, value]) => {
+                            const config = nutritionKeys[key];
+                            return (
+                                <DashboardCard
+                                    key={key}
+                                    icon={config.icon}
+                                    label={config.label}
+                                    makananHariIni={value}
+                                    kebutuhan={kbt[key.toLowerCase()]}
+                                    satuan={config.satuan}
+                                />
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -97,29 +178,39 @@ export default function Dashboard() {
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <DashboardCard
-                            icon={Sparkles}
-                            label="Natrium"
-                            makananHariIni={mkn.natrium}
-                            kebutuhan={kbt.natrium}
-                            satuan="mg"
-                        />
-                        <DashboardCard
-                            icon={Leaf}
-                            label="Serat"
-                            makananHariIni={mkn.serat}
-                            kebutuhan={kbt.serat}
-                        />
-                        <DashboardCard
-                            icon={Candy}
-                            label="Gula"
-                            makananHariIni={mkn.gula_tambahan}
-                            kebutuhan={kbt.gula_tambahan}
-                        />
+                        {Object.entries({
+                            Natrium: mkn.natrium,
+                            Serat: mkn.serat,
+                            Gula_tambahan: mkn.gula_tambahan,
+                        }).map(([key, value]) => {
+                            const config = nutritionKeys[key];
+                            // Khusus untuk Gula_tambahan, key di prop adalah gula_tambahan
+                            const propKey =
+                                key === "Gula_tambahan"
+                                    ? "gula_tambahan"
+                                    : key.toLowerCase();
+
+                            return (
+                                <DashboardCard
+                                    key={key}
+                                    icon={config.icon}
+                                    label={config.label}
+                                    makananHariIni={value}
+                                    kebutuhan={kbt[propKey]}
+                                    satuan={config.satuan}
+                                />
+                            );
+                        })}
                     </div>
                 </div>
 
-                <EventsChart />
+                {/* EventsChart Baru */}
+                <EventsChart
+                    data={makananRentangTanggal}
+                    chartDates={chartDates}
+                    nutritionKeys={nutritionKeys}
+                    kebutuhan={kebutuhan}
+                />
             </div>
         </AppLayout>
     );
