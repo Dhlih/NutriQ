@@ -10,14 +10,15 @@ import {
     MarsStroke,
     User,
     Cake,
+    Bike, // Ikon baru untuk Aktivitas
 } from "lucide-react";
 
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
-import { Card } from "@/Components/ui/card"; // Pastikan path ini benar
+import { Card } from "@/Components/ui/card";
 import AppLayout from "@/Components/AppLayout";
-import useNotify from "@/Components/ToastNotification"; // Asumsi Anda punya ini dari step sebelumnya
+import useNotify from "@/Components/ToastNotification";
 
 export default function Profil() {
     // Mengambil data pengguna dari props (jika ada data awal)
@@ -26,27 +27,46 @@ export default function Profil() {
 
     const { notifySuccess, notifyError } = useNotify();
 
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, patch, processing, errors } = useForm({
         nama: user?.name || "",
         tinggi: user?.tinggi || "",
         berat: user?.berat || "",
         jenis_kelamin: user?.jenis_kelamin || "",
         umur: user?.umur || "",
+        // Tambahkan state baru untuk Tingkat Aktivitas
+        tingkat_aktivitas: user?.aktivitas || "",
     });
+
+    console.log(data.tingkat_aktivitas);
 
     const handleUpdate = (e) => {
         e.preventDefault();
 
-        put(route("profile.update"), {
+        // Mengganti put menjadi patch (biasanya update profil menggunakan patch)
+        patch(route("profile.update"), {
             // Sesuaikan route Anda
             onSuccess: () => {
                 notifySuccess("Berhasil", "Profil berhasil diperbarui!");
             },
-            onError: () => {
+            onError: (errors) => {
+                // Log errors dari Inertia untuk debug
+                console.error(errors);
                 notifyError("Gagal", "Periksa kembali inputan Anda.");
             },
         });
     };
+
+    // Opsi untuk Tingkat Aktivitas
+    const aktivitasOptions = [
+        {
+            value: "sangat_rendah",
+            label: "Sangat Rendah (Jarang Beraktivitas)",
+        },
+        { value: "rendah", label: "Rendah (Olah Raga 1-3x/minggu)" },
+        { value: "sedang", label: "Sedang (Olah Raga 3-5x/minggu)" },
+        { value: "berat", label: "Berat (Olah Raga 6-7x/minggu)" },
+        { value: "sangat_berat", label: "Sangat Berat (Olah Raga 2x/hari)" },
+    ];
 
     // Style Class Helpers
     const iconClass =
@@ -54,6 +74,9 @@ export default function Profil() {
     const inputClass =
         "pl-10 bg-[#F9FAEF] border-[#D5E1C3] focus:border-[#7A9E7E] focus:ring-[#7A9E7E] text-[#2C3A2C] placeholder:text-[#8D9F8D]";
     const labelClass = "text-base font-semibold text-[#2C3A2C] mb-1.5";
+
+    // Kelas khusus untuk Select (memastikan style konsisten dengan Input)
+    const selectClass = `flex h-12 w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 ${inputClass} appearance-none`;
 
     return (
         <AppLayout>
@@ -180,7 +203,7 @@ export default function Profil() {
                                     )}
                                 </div>
 
-                                {/* JENIS KELAMIN - Menggunakan Select Native agar lebih UX friendly */}
+                                {/* JENIS KELAMIN */}
                                 <div className="space-y-1">
                                     <Label className={labelClass}>
                                         Jenis Kelamin
@@ -188,7 +211,7 @@ export default function Profil() {
                                     <div className="relative">
                                         <MarsStroke className={iconClass} />
                                         <select
-                                            className={`flex h-12 w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 ${inputClass} appearance-none`}
+                                            className={selectClass} // Menggunakan kelas yang sudah didefinisikan
                                             value={data?.jenis_kelamin}
                                             onChange={(e) =>
                                                 setData(
@@ -214,6 +237,43 @@ export default function Profil() {
                                         </span>
                                     )}
                                 </div>
+                            </div>
+
+                            {/* TINGKAT AKTIVITAS (Baru) */}
+                            <div className="space-y-1">
+                                <Label className={labelClass}>
+                                    Tingkat Aktivitas Fisik
+                                </Label>
+                                <div className="relative">
+                                    <Bike className={iconClass} />
+                                    <select
+                                        className={selectClass}
+                                        value={data?.tingkat_aktivitas}
+                                        onChange={(e) =>
+                                            setData(
+                                                "tingkat_aktivitas",
+                                                e.target.value
+                                            )
+                                        }
+                                    >
+                                        <option value="" disabled>
+                                            Pilih Tingkat Aktivitas Harian
+                                        </option>
+                                        {aktivitasOptions.map((option) => (
+                                            <option
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                {errors.tingkat_aktivitas && (
+                                    <span className="text-red-500 text-sm">
+                                        {errors.tingkat_aktivitas}
+                                    </span>
+                                )}
                             </div>
 
                             {/* ACTION BUTTONS */}
@@ -254,3 +314,5 @@ export default function Profil() {
         </AppLayout>
     );
 }
+
+// Komponen LoadingAnalisis tidak dimodifikasi karena tidak terkait langsung dengan form Profil.

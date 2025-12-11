@@ -58,6 +58,7 @@ class UserController extends Controller
         return redirect()->route('dashboard')->with('success', 'Data berhasil disimpan!');
     }
 
+    // update kebutuhan harian pengguna
     public function update(Request $request, GeminiService $gemini)
     {
         $validated = $request->validate([
