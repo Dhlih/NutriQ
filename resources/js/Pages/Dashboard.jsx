@@ -128,8 +128,8 @@ export default function Dashboard() {
                     {/* Tombol Date Picker untuk Filter 'Hari Ini' */}
                     <div className="self-start md:self-center">
                         <DatePickerDropdown
-                            selectedDate={tanggalHeader}
-                            onDateSelect={handleDateChange}
+                            value={tanggalHeader}
+                            onChange={handleDateChange}
                             align="end" // Dropdown muncul di kanan
                         >
                             {/* Konten yang akan menjadi tombol/trigger dropdown */}
