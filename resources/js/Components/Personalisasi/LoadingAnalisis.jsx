@@ -62,7 +62,7 @@ export default function LoadingAnalisis() {
                     AI Sedang Bekerja...
                 </h2>
                 <p className="text-[#5C6F5C] mb-8">
-                    Mengidentifikasi makanan dan menghitung nutrisi.
+                    Menganalisis kebutuhan nutrisi pengguna.
                 </p>
 
                 {/* Progress Bar */}
