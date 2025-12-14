@@ -30,7 +30,6 @@ export default function HasilScan({ makanan }) {
                     {/* --- HEADER NAVIGATION --- */}
                     <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
                         <div className="flex items-center gap-4 w-full md:w-auto">
-                          
                             <div>
                                 <h1 className="text-2xl md:text-3xl font-bold text-[#2C3A2C]">
                                     Hasil Scan Makanan
@@ -56,11 +55,14 @@ export default function HasilScan({ makanan }) {
                     <div className="bg-white rounded-2xl border border-[#D5E1C3] p-6 mb-10 shadow-sm flex flex-col md:flex-row gap-8">
                         {/* Foto */}
                         <div className="w-full md:w-1/3">
-                            <div className="rounded-xl overflow-hidden bg-[#E9EFDB] border border-[#D5E1C3] aspect-video md:aspect-auto h-full min-h-[200px]">
+                            <div
+                                className="relative w-full overflow-hidden rounded-xl bg-[#E9EFDB] border border-[#D5E1C3]
+                    aspect-[4/3] sm:aspect-video md:aspect-square"
+                            >
                                 <img
                                     src={makanan.foto}
-                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                                     alt="Foto makanan"
+                                    className="absolute inset-0 w-full h-full object-cover"
                                 />
                             </div>
                         </div>
@@ -70,7 +72,6 @@ export default function HasilScan({ makanan }) {
                             {/* --- BAGIAN NAMA MAKANAN (DITAMBAHKAN) --- */}
                             <div className="pb-4 border-b border-[#F2F5E8]">
                                 <h2 className="text-3xl font-bold text-[#2C3A2C] mb-2 flex items-center gap-2">
-                                    
                                     {makanan.nama || "Nama Makanan"}{" "}
                                     {/* Menampilkan nama makanan */}
                                 </h2>
